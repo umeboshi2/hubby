@@ -3,8 +3,18 @@ import sys, os
 
 version = '0.0'
 
+requires = [
+    'SQLAlchemy',
+    'feedparser',      # only needed for rss collection
+    'psycopg2',        # dbapi for postgresql
+    'mechanize',
+    'beautifulsoup4',
+    ]
+
+
 setup(name='hubby',
       version=version,
+      setup_requires=['github-distutils >= 0.1.0'],
       description="track and analyze municipal legislation",
       long_description="""\
 track and analyze municipal legislation""",
@@ -17,10 +27,10 @@ track and analyze municipal legislation""",
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          # -*- Extra requirements: -*-
-      ],
+      install_requires=requires,
       entry_points="""
       # -*- Entry points: -*-
       """,
       )
+
+
