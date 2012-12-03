@@ -1,6 +1,6 @@
 import re
 
-from leaflet.hubby.util import legistar_id_guid
+from hubby.util import legistar_id_guid
 
 from base import BaseCollector
 

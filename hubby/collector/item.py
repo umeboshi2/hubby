@@ -1,6 +1,6 @@
 import re
 
-from leaflet.hubby.util import onclick_link
+from hubby.util import onclick_link
 
 from base import BaseCollector
 

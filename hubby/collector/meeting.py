@@ -1,7 +1,7 @@
 import re
 
-from leaflet.hubby.util import onclick_link
-from leaflet.hubby.util import legistar_id_guid
+from hubby.util import onclick_link
+from hubby.util import legistar_id_guid
 
 from base import BaseCollector
 

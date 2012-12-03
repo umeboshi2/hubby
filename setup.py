@@ -9,6 +9,7 @@ requires = [
     'psycopg2',        # dbapi for postgresql
     'mechanize',
     'beautifulsoup4',
+    'transaction',     # I am not sure if I should use this or not
     ]
 
 

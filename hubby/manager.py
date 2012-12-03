@@ -3,16 +3,13 @@ import transaction
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import desc
 
-from leaflet.hubby.legistar import legistar_host
-from leaflet.hubby.util import legistar_id_guid
+from hubby.legistar import legistar_host
+from hubby.util import legistar_id_guid
 
-from leaflet.models.base import DBSession
-from leaflet.models.rssdata import Feed, FeedData
-from leaflet.models.hubby import Department, Person
-from leaflet.models.hubby import Meeting, Item, Action
+from hubby.database import Department, Person
+from hubby.database import Meeting, Item, Action
 
-
-from leaflet.hubby.collector import MainCollector
+from hubby.collector import MainCollector
 
 
 
