@@ -11,7 +11,7 @@ AMENDMENTS_TO_AGENDA_DEPT = 15836
 
 AGENDA_ITEM_ORDER = ['presentation', 'policy', 'routine', 'unknown']
 
-RSS_THIS_MONTH = 'http://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=517515&GUID=f9880525-7349-4f51-b375-ac3ded1ccf13&Mode=This Month&Title=City+of+Hattiesburg,+MS+-+Calendar+(This+Month)'
+RSS_THIS_MONTH = 'http://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=517515&GUID=f9880525-7349-4f51-b375-ac3ded1ccf13&Mode=This+Month&Title=City+of+Hattiesburg,+MS+-+Calendar+(This+Month)'
 
 RSS_YEAR_2011 = 'http://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=517521&GUID=519a4642-ea34-4238-8c5d-68ba5056030f&Mode=2011&Title=City+of+Hattiesburg,+MS+-+Calendar+(2011)'
 
