@@ -36,7 +36,7 @@ class ItemCollector(BaseCollector):
                 a = tags[0]
                 item[key] = onclick_link(a['onclick'])
                 continue
-            if key == 'attachments':
+            if key == 'attachments' and len(tags):
                 chunk = tags[0]
                 attachments = []
                 for anchor in chunk.find_all('a'):
@@ -44,6 +44,8 @@ class ItemCollector(BaseCollector):
                     link = anchor['href']
                     attachments.append((name, link))
                 item[key] = attachments
+                continue
+            if not len(tags) and key == 'attachments':
                 continue
             item[key] = tags[0].text.strip()
         return item

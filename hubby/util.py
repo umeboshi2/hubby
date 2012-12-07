@@ -11,6 +11,9 @@ class FileExistsError(Exception):
 class BadDownloadError(Exception):
     pass
 
+class InvalidDateFormat(Exception):
+    pass
+
 # Tidy function inspired by:
 #http://www.toao.net/48-replacing-smart-quotes-and-em-dashes-in-mysql
 def tidy_needless_utf_punctuation(data):
@@ -36,7 +39,7 @@ def random_wait(minimum=5, maximum=15, msg=''):
 def parse_date_string(datestring):
     dlist = datestring.split('/')
     if len(dlist) != 3:
-        raise RuntimeError , "Invalid date string: %s" % datestring
+        raise InvalidDateFormat, "Invalid date string: %s" % datestring
     dlist = map(int, dlist)
     proper = dlist[2], dlist[0], dlist[1]
     return proper

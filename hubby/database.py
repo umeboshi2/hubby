@@ -84,9 +84,7 @@ class Meeting(Base):
     time = Column(String)
     link = Column(String)
     dept_id = Column(Integer, ForeignKey('departments.id'))
-    agenda_id = Column(Integer)
     agenda_status = Column(String)
-    minutes_id = Column(Integer)
     minutes_status = Column(String)
     rss = Column(PickleType)
     updated = Column(DateTime)
@@ -107,7 +105,7 @@ class Meeting(Base):
         self.updated = None
         
     def __repr__(self):
-        return "<Meeting: '%s'>" % self.title
+        return "<Meeting(%d): '%s'>" % (self.id, self.title)
     
 class Item(Base):
     __tablename__ = 'items'
@@ -135,7 +133,7 @@ class Item(Base):
         self.passed = None
         self.on_agenda = None
         self.introduced = None
-        self.acted_on = None
+        self.acted_on = False
 
     def __repr__(self):
         return "<Item: %s, id: %d>" % (self.file_id, self.id)

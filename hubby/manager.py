@@ -1,3 +1,4 @@
+import datetime
 import transaction
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -59,6 +60,7 @@ class ModelManager(object):
     
     # link is relative from legistar prefix
     def _remote_legislation_item(self, link):
+        print "using link", link
         collector = self.collector()
         url = collector.url_prefix + link
         collector.set_url(url)
@@ -69,16 +71,22 @@ class ModelManager(object):
     def remote_legislation_item(self, link):
         item = self._remote_legislation_item(link)
         # add id, guid to item
-        id, guid = legistar_id_guid(link)
         item['id'], item['guid'] = legistar_id_guid(link)
         for key in ['introduced', 'on_agenda', 'passed']:
             if key in item and item[key]:
                 item[key] = make_true_date(item[key])
+        key = 'action_details'
+        notnull = item[key] is not None
+        if notnull and item[key].startswith('HistoryDetail.aspx'):
+            item['acted_on'] = True
+        else:
+            item['acted_on'] = False
         return item
 
     # link is full url to meeting
     def remote_legislation_items(self, link):
         meeting_items = self.remote_meeting_items(link)
+        print "Meeting has %d items" % len(meeting_items)
         leg_items = []
         for item in meeting_items:
             item_page = item['item_page']
@@ -94,10 +102,11 @@ class ModelManager(object):
         collector.set_url(meeting.link)
         collector.collect('meeting')
         info = collector.result['info']
-        for key in ['id', 'guid', 'date', 'time', 'link',
+        for key in ['id', 'guid', 'time', 'link',
                     'dept_id', 'agenda_status', 'minutes_status']:
             value = info[key]
             setattr(meeting, key, value)
+        setattr(meeting, 'date', make_true_date(info['date']))
         self.session.merge(meeting)
         self.session.flush()
         transaction.commit()
@@ -138,6 +147,10 @@ class ModelManager(object):
         transaction.begin()
         dbitem = Item()
         for key in item:
+            if key == 'attachments':
+                continue
+            value = item[key]
+            print "setting %s to %s" % (key, value)
             setattr(dbitem, key, item[key])
         self.session.add(dbitem)
         self.session.flush()
