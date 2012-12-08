@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import transaction
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -9,7 +9,9 @@ from hubby.util import legistar_id_guid
 from hubby.util import make_true_date
 
 from hubby.database import Department, Person
-from hubby.database import Meeting, Item, Action
+from hubby.database import Meeting, Item
+from hubby.database import ItemAction, Action, ActionVote
+from hubby.database import Attachment
 
 from hubby.collector import MainCollector
 from hubby.collector.rss import RssCollector
@@ -34,6 +36,7 @@ class ModelManager(object):
         meeting.link = entry.link
         meeting.rss = entry
         meeting.id, meeting.guid = legistar_id_guid(entry.link)
+        meeting.updated = datetime.now()
         self.session.add(meeting)
         self.session.flush()
         transaction.commit()
@@ -76,8 +79,7 @@ class ModelManager(object):
             if key in item and item[key]:
                 item[key] = make_true_date(item[key])
         key = 'action_details'
-        notnull = item[key] is not None
-        if notnull and item[key].startswith('HistoryDetail.aspx'):
+        if len(item[key]):
             item['acted_on'] = True
         else:
             item['acted_on'] = False
@@ -93,23 +95,37 @@ class ModelManager(object):
             leg_item = self.remote_legislation_item(item_page)
             leg_items.append(leg_item)
         return leg_items
-        
+
+
+    def merge_remote_meeting_items(self, meeting_id):
+        pass
     
-    def merge_meeting_from_legistar(self, id):
-        collector = MainCollector()
+    def merge_remote_legislation_items(self, meeting_id):
+        pass
+    
+
+    # meeting is db object, collected is from collector
+    def _merge_collected_meeting(self, meeting, collected):
         transaction.begin()
-        meeting = self.session.query(Meeting).filter_by(id=id).one()
-        collector.set_url(meeting.link)
-        collector.collect('meeting')
-        info = collector.result['info']
+        info = collected['info']
         for key in ['id', 'guid', 'time', 'link',
                     'dept_id', 'agenda_status', 'minutes_status']:
             value = info[key]
             setattr(meeting, key, value)
         setattr(meeting, 'date', make_true_date(info['date']))
+        meeting.updated = datetime.now()
         self.session.merge(meeting)
         self.session.flush()
         transaction.commit()
+        
+    def merge_meeting_from_legistar(self, id):
+        collector = MainCollector()
+        meeting = self.session.query(Meeting).filter_by(id=id).one()
+        collector.set_url(meeting.link)
+        collector.collect('meeting')
+        self._merge_collected_meeting(meeting, collector.meeting)
+        
+
     
     def add_departments(self):
         collector = MainCollector()
@@ -140,6 +156,39 @@ class ModelManager(object):
         collector = RssCollector()
         collector.get_rss(url)
         return collector
+
+    def add_collected_action(self, action):
+        dbaction = Action()
+        for key in ['id', 'guid', 'action_text',
+                    'action', 'result']:
+            setattr(dbaction, key, action[key])
+        dbaction.filetype = action['ftype']
+        for key in ['agenda_note', 'minutes_note']:
+            value = action[key].strip()
+            if not value:
+                value = None
+            setattr(dbaction, key, value)
+        for key in ['mover', 'seconder']:
+            name, link = action[key]
+            if not name:
+                continue
+            id, guid = legistar_id_guid(link)
+            att = '%s_id' % key
+            setattr(dbaction, att, id)
+        file_id, link = action['file_id']
+        dbaction.file_id = file_id
+        # get item id from file_id link
+        item_id, guid = legistar_id_guid(link)
+        # make item_action object
+        item_action = ItemAction(item_id, dbaction.id)
+        self.session.add(item_action)
+        # handle votes
+        for name, link, vote in action['votes']:
+            person_id, ignore = legistar_id_guid(link)
+            avote = ActionVote(dbaction.id, person_id, vote)
+            self.session.add(avote)
+        self.session.add(dbaction)
+        
     
     # here item is an item collected from
     # legistar
@@ -150,9 +199,31 @@ class ModelManager(object):
             if key == 'attachments':
                 continue
             value = item[key]
-            print "setting %s to %s" % (key, value)
-            setattr(dbitem, key, item[key])
+            if key in ['passed'] and not item[key]:
+                value = None
+            #print "setting %s to %s" % (key, value)
+            setattr(dbitem, key, value)
         self.session.add(dbitem)
+        if item['attachments'] is not None:
+            for name, link in item['attachments']:
+                id, guid = legistar_id_guid(link)
+                dbobj = self.session.query(Attachment).get(id)
+                if dbobj is None:
+                    attachment = Attachment()
+                    attachment.id, attachment.guid = id, guid
+                    attachment.name = name
+                    attachment.link = link
+                    attachment.item_id = dbitem.id
+                    self.session.add(attachment)
+                else:
+                    msg = 'Duplicate attachment %d' % id
+                    raise RuntimeError, msg
+        for link in item['action_details']:
+            collector = MainCollector()
+            url = collector.url_prefix + link
+            collector.set_url(url)
+            collector.collect('action')
+            self.add_collected_action(collector.action)
         self.session.flush()
         transaction.commit()
     

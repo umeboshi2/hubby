@@ -1,5 +1,7 @@
 import re
 
+from hubby.util import legistar_id_guid
+
 from base import BaseCollector
 
 ACTION_DATA_IDENTIFIERS = dict(file_id='_hypFile',
@@ -16,6 +18,7 @@ ACTION_DATA_IDENTIFIERS = dict(file_id='_hypFile',
 
 class ActionCollector(BaseCollector):
     def _get_votes(self, page):
+        print "getting votes for", self.url
         tables = page.find_all('table', class_='rgMasterTable')
         if len(tables) != 1:
             msg = "Problem with determining master table len(tables) = %d"
@@ -23,6 +26,8 @@ class ActionCollector(BaseCollector):
         table = tables.pop()
         items = []
         for row in table.find_all('tr')[1:]:
+            if 'rgNoRecords' in row['class']:
+                return []
             person, vote = row.find_all('td')
             name = person.text.strip()
             link = person.a['href']
@@ -60,6 +65,7 @@ class ActionCollector(BaseCollector):
     def collect(self):
         self.retrieve_page(self.url)
         self.action = self._get_action(self.soup)
+        self.action['id'], self.action['guid'] = legistar_id_guid(self.url)
         self.result = self.action
         
                 

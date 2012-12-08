@@ -21,6 +21,7 @@ class ItemCollector(BaseCollector):
         markers = ITEM_DATA_IDENTIFIERS
         item_keys = markers.keys()
         item = {}.fromkeys(item_keys)
+        item['action_details'] = []
         for key in item_keys:
             #print "trying for key", key
             exp = re.compile('.+%s$' % markers[key])
@@ -32,9 +33,8 @@ class ItemCollector(BaseCollector):
             if len(tags) > 1:
                 print "len(%s) == %d" % (key, len(tags))
             if key == 'action_details':
-                #item[key] = tags[0]
-                a = tags[0]
-                item[key] = onclick_link(a['onclick'])
+                for a in tags:
+                    item[key].append(onclick_link(a['onclick']))
                 continue
             if key == 'attachments' and len(tags):
                 chunk = tags[0]
@@ -47,7 +47,11 @@ class ItemCollector(BaseCollector):
                 continue
             if not len(tags) and key == 'attachments':
                 continue
-            item[key] = tags[0].text.strip()
+            value = tags[0].text.strip()
+            if value:
+                item[key] = value
+            else:
+                item[key] = None
         return item
     
     def collect(self):

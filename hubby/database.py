@@ -137,6 +137,10 @@ class Item(Base):
 
     def __repr__(self):
         return "<Item: %s, id: %d>" % (self.file_id, self.id)
+
+    def link(self):
+        tmpl = 'LegislationDetail.aspx?ID=%d&GUID=%s&Options=&Search='
+        return tmpl % (self.id, self.guid)
     
 class MeetingItem(Base):
     __tablename__ = 'meeting_item'
@@ -173,8 +177,8 @@ class Action(Base):
     guid = Column(String)
     file_id = Column(String)
     filetype = Column(String)
-    mover = Column(String)
-    seconder = Column(String)
+    mover_id = Column(Integer, ForeignKey('people.id'))
+    seconder_id = Column(Integer, ForeignKey('people.id'))
     result = Column(String)
     agenda_note = Column(String)
     minutes_note = Column(String)
@@ -189,8 +193,8 @@ class Action(Base):
         self.guid = None
         self.file_id = None
         self.filetype = None
-        self.mover = None
-        self.seconder = None
+        self.mover_id = None
+        self.seconder_id = None
         self.result = None
         self.agenda_note = None
         self.minutes_note = None
@@ -395,3 +399,6 @@ Item.attachments = relationship(Attachment, backref='item',
 Action.item = relationship(Item, backref='items',
                            secondary='item_action')
 
+Action.mover = relationship(Person, primaryjoin='Action.mover_id == Person.id')
+Action.seconder = relationship(Person,
+                               primaryjoin='Action.seconder_id == Person.id')
