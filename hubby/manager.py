@@ -188,6 +188,10 @@ class ModelManager(object):
             dbaction.file_id = file_id
         else:
             dbaction.action = 'Roll Call'
+        self.session.add(dbaction)
+        # flush here so the action can be referred by
+        # foreign keys in 'item_action' and 'action_vote'
+        self.session.flush()
         # make item_action object
         item_action = ItemAction(item_id, dbaction.id)
         self.session.add(item_action)
@@ -196,7 +200,6 @@ class ModelManager(object):
             person_id, ignore = legistar_id_guid(link)
             avote = ActionVote(dbaction.id, person_id, vote)
             self.session.add(avote)
-        self.session.add(dbaction)
         
 
     # add the item before the actions

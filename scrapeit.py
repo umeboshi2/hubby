@@ -21,6 +21,7 @@ from hubby.util import legistar_id_guid
 
 here = os.getcwd()
 settings = {'sqlalchemy.url' : 'sqlite:///%s/hubby.sqlite' % here}
+settings = {'sqlalchemy.url' : 'postgresql://dbadmin@bard/hubby'}
 engine = engine_from_config(settings)
 Base.metadata.create_all(engine)
 Session = sessionmaker()
