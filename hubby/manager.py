@@ -157,28 +157,31 @@ class ModelManager(object):
         collector.get_rss(url)
         return collector
 
-    def add_collected_action(self, action):
+    def add_collected_action(self, item_id, action):
         dbaction = Action()
-        for key in ['id', 'guid', 'action_text',
-                    'action', 'result']:
+        action['filetype'] = action['ftype']
+        main_keys = ['id', 'guid']
+        if not action['roll_call']:
+            main_keys += ['action', 'action_text', 'result', 'filetype']
+        for key in main_keys:
             setattr(dbaction, key, action[key])
-        dbaction.filetype = action['ftype']
-        for key in ['agenda_note', 'minutes_note']:
-            value = action[key].strip()
-            if not value:
-                value = None
-            setattr(dbaction, key, value)
-        for key in ['mover', 'seconder']:
-            name, link = action[key]
-            if not name:
-                continue
-            id, guid = legistar_id_guid(link)
-            att = '%s_id' % key
-            setattr(dbaction, att, id)
-        file_id, link = action['file_id']
-        dbaction.file_id = file_id
-        # get item id from file_id link
-        item_id, guid = legistar_id_guid(link)
+        if not action['roll_call']:
+            for key in ['agenda_note', 'minutes_note']:
+                value = action[key].strip()
+                if not value:
+                    value = None
+                setattr(dbaction, key, value)
+            for key in ['mover', 'seconder']:
+                name, link = action[key]
+                if not name:
+                    continue
+                id, guid = legistar_id_guid(link)
+                att = '%s_id' % key
+                setattr(dbaction, att, id)
+            file_id, link = action['file_id']
+            dbaction.file_id = file_id
+        else:
+            dbaction.action = 'Roll Call'
         # make item_action object
         item_action = ItemAction(item_id, dbaction.id)
         self.session.add(item_action)
@@ -223,7 +226,7 @@ class ModelManager(object):
             url = collector.url_prefix + link
             collector.set_url(url)
             collector.collect('action')
-            self.add_collected_action(collector.action)
+            self.add_collected_action(item['id'], collector.action)
         self.session.flush()
         transaction.commit()
     

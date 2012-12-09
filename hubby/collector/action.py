@@ -39,6 +39,8 @@ class ActionCollector(BaseCollector):
         markers = ACTION_DATA_IDENTIFIERS
         item_keys = markers.keys()
         item = {}.fromkeys(item_keys)
+        item['roll_call'] = False
+        found_tags = False
         for key in item_keys:
             exp = re.compile('.+%s$' % markers[key])
             tags = page.find_all('span', id=exp)
@@ -47,6 +49,7 @@ class ActionCollector(BaseCollector):
             if not tags:
                 print "NO TAGS FOR", key
                 continue
+            found_tags = True
             if len(tags) > 1:
                 print "len(%s) == %d" % (key, len(tags))
             tag = tags[0]
@@ -59,6 +62,10 @@ class ActionCollector(BaseCollector):
                 item[key] = (name, link)
             else:
                 item[key] = tag
+        if not found_tags:
+            rollcall_id = 'ctl00_ContentPlaceHolder1_pageRollCall'
+            if page.find_all('div', id=rollcall_id):
+                item['roll_call'] = True
         item['votes'] = self._get_votes(page)
         return item
 
@@ -71,6 +78,7 @@ class ActionCollector(BaseCollector):
                 
 if __name__ == "__main__":
     url = 'http://hattiesburg.legistar.com/HistoryDetail.aspx?ID=6153632&GUID=1376DD13-58E1-443A-9A2E-F218CE70C4B6'
+    url = 'http://hattiesburg.legistar.com/HistoryDetail.aspx?ID=5821489&GUID=3BF5DB0B-A3A7-4F90-BC9A-8670088BECA7'
     ac = ActionCollector()
     ac.retrieve_page(url)
     i = ac._get_action(ac.soup)
