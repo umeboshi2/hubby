@@ -23,7 +23,7 @@ class DeptCollector(BaseCollector):
     
     
     def collect(self):
-        self.retrieve_page(self.dept_url)
+        self.retrieve_page(self.url)
         self.depts = self._get_depts(self.soup)
         self.result = self.depts
         

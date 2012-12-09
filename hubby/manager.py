@@ -130,8 +130,11 @@ class ModelManager(object):
     def add_departments(self):
         collector = MainCollector()
         collector.collect('dept')
+        self.add_collected_depts(collector.result)
+        
+    def add_collected_depts(self, depts):
         transaction.begin()
-        for dept_info in collector.result:
+        for dept_info in depts:
             id, guid, name = dept_info
             dept = Department(id, guid)
             dept.name = name
@@ -142,8 +145,11 @@ class ModelManager(object):
     def add_people(self):
         collector = MainCollector()
         collector.collect('people')
+        self.add_collected_people(collector.result)
+        
+    def add_collected_people(self, people):
         transaction.begin()
-        for pinfo in collector.result:
+        for pinfo in people:
             person = Person()
             for key in pinfo:
                 setattr(person, key, pinfo[key])
@@ -192,10 +198,9 @@ class ModelManager(object):
             self.session.add(avote)
         self.session.add(dbaction)
         
-    
-    # here item is an item collected from
-    # legistar
-    def add_new_legislation_item(self, item):
+
+    # add the item before the actions
+    def _add_collected_legislation_item(self, item):
         transaction.begin()
         dbitem = Item()
         for key in item:
@@ -221,6 +226,12 @@ class ModelManager(object):
                 else:
                     msg = 'Duplicate attachment %d' % id
                     raise RuntimeError, msg
+        transaction.commit()
+        
+    # here item is an item collected from
+    # legistar
+    def add_new_legislation_item(self, item):
+        self._add_collected_legislation_item(item)
         for link in item['action_details']:
             collector = MainCollector()
             url = collector.url_prefix + link

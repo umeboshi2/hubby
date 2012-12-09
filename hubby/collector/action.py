@@ -18,7 +18,7 @@ ACTION_DATA_IDENTIFIERS = dict(file_id='_hypFile',
 
 class ActionCollector(BaseCollector):
     def _get_votes(self, page):
-        print "getting votes for", self.url
+        #print "getting votes for", self.url
         tables = page.find_all('table', class_='rgMasterTable')
         if len(tables) != 1:
             msg = "Problem with determining master table len(tables) = %d"

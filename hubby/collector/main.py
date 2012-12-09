@@ -1,3 +1,8 @@
+import os
+import cPickle as Pickle
+
+from hubby.util import legistar_id_guid
+
 from base import BaseCollector
 
 from people import PeopleCollector
@@ -5,6 +10,63 @@ from departments import DeptCollector
 from meeting import MeetingCollector
 from item import ItemCollector
 from action import ActionCollector
+
+
+class PickleCollector(object):
+    def __init__(self):
+        self.people = PeopleCollector()
+        self.depts = DeptCollector()
+        self.meeting = MeetingCollector()
+        self.item = ItemCollector()
+        self.action = ActionCollector()
+        self.dir = 'data'
+        
+        self._collectors = dict(people=self.people,
+                                depts=self.depts,
+                                meeting=self.meeting,
+                                item=self.item,
+                                action=self.action)
+        
+    def _collector(self, type):
+        return self._collectors[type]
+
+    def _filename(self, type, id=None):
+        if type == 'people':
+            filename = 'people.pickle'
+        elif type == 'depts':
+            filename = 'departments.pickle'
+        elif type == 'meeting':
+            filename = 'meeting-%d.pickle' % id
+        elif type == 'item':
+            filename = 'item-%d.pickle' % id
+        elif type == 'action':
+            filename = 'action-%d.pickle' % id
+        else:
+            raise RuntimeError , 'unknown type'
+        return os.path.join(self.dir, filename)
+    
+
+    def collect(self, type, link=None):
+        id = None
+        if type in ['meeting', 'item', 'action']:
+            id, guid = legistar_id_guid(link)
+        filename = self._filename(type, id)
+        if not os.path.isfile(filename):
+            print "Retrieving %s from legistar..." % filename
+            collector = self._collector(type)
+            if link is not None:
+                if not link.startswith('http'):
+                    link = collector.url_prefix + link
+                collector.set_url(link)
+            collector.collect()
+            Pickle.dump(collector.result, file(filename, 'w'))
+        return Pickle.load(file(filename))
+        
+        
+    
+        
+    
+
 
 class _MainCollector(PeopleCollector, DeptCollector,
                      MeetingCollector, ItemCollector,

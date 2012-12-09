@@ -10,6 +10,7 @@ class BaseCollector(object):
         self.pageinfo = None
         self.content = ''
         self.soup = None
+        self.url_prefix = 'http://hattiesburg.legistar.com/'
 
     def retrieve_page(self, url=None):
         if url is None:

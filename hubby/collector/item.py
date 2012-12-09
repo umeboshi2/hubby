@@ -1,6 +1,9 @@
 import re
 
 from hubby.util import onclick_link
+from hubby.util import make_true_date
+from hubby.util import legistar_id_guid
+
 
 from base import BaseCollector
 
@@ -57,6 +60,16 @@ class ItemCollector(BaseCollector):
     def collect(self):
         self.retrieve_page(self.url)
         self.item = self._get_item(self.soup)
+        for key in ['passed', 'introduced', 'on_agenda']:
+            if key in self.item and not self.item[key]:
+                self.item[key] = None
+            else:
+                self.item[key] = make_true_date(self.item[key])
+        if len(self.item['action_details']):
+            self.item['acted_on'] = True
+        else:
+            self.item['acted_on'] = False
+        self.item['id'], self.item['guid'] = legistar_id_guid(self.url)
         self.result = self.item
         
     
