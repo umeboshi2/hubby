@@ -210,9 +210,6 @@ class ModelManager(object):
             if key == 'attachments':
                 continue
             value = item[key]
-            if key in ['passed'] and not item[key]:
-                value = None
-            #print "setting %s to %s" % (key, value)
             setattr(dbitem, key, value)
         self.session.add(dbitem)
         if item['attachments'] is not None:

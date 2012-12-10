@@ -18,10 +18,21 @@ from hubby.manager import ModelManager
 from hubby.util import legistar_id_guid
 
 
+if 'OPENSHIFT_POSTGRESQL_DB_HOST' in os.environ:
+    dbhost = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
+    dbport = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
+    dbuser = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
+    dbpass = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
+    dburl = "postgresql://%s:%s@%s:%s/leaflet"
+    dburl = dburl % (dbuser, dbpass, dbhost, dbport)
+else:
+    dburl = "postgresql://dbadmin@bard/leaflet"
+    
+
 
 here = os.getcwd()
 settings = {'sqlalchemy.url' : 'sqlite:///%s/hubby.sqlite' % here}
-settings = {'sqlalchemy.url' : 'postgresql://dbadmin@bard/hubby'}
+settings = {'sqlalchemy.url' : dburl}
 engine = engine_from_config(settings)
 Base.metadata.create_all(engine)
 Session = sessionmaker()

@@ -37,7 +37,8 @@ class ItemCollector(BaseCollector):
                 print "len(%s) == %d" % (key, len(tags))
             if key == 'action_details':
                 for a in tags:
-                    item[key].append(onclick_link(a['onclick']))
+                    if 'onclick' in a.attrs:
+                        item[key].append(onclick_link(a['onclick']))
                 continue
             if key == 'attachments' and len(tags):
                 chunk = tags[0]
