@@ -372,8 +372,7 @@ class ItemTag(Base):
 # Meeting relationships
 meeting_backref = backref('meeting', uselist=False)
 
-Meeting.dept = relationship(Department,
-                            backref=meeting_backref)
+Meeting.dept = relationship(Department, backref='meetings')
 
 Meeting.items = relationship(Item, backref='meetings',
                              secondary='meeting_item')
