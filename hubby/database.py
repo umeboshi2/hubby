@@ -376,10 +376,10 @@ Meeting.dept = relationship(Department,
                             backref=meeting_backref)
 
 Meeting.items = relationship(Item, backref='meetings',
-                             order_by=Item.id,
                              secondary='meeting_item')
 
-Meeting.meeting_items = relationship(MeetingItem)
+Meeting.meeting_items = relationship(MeetingItem,
+                                     order_by=MeetingItem.item_order)
 
 Meeting.agenda = relationship(Agenda, uselist=False,
                               backref=meeting_backref)
