@@ -144,7 +144,7 @@ class Item(Base):
     
 class MeetingItem(Base):
     __tablename__ = 'meeting_item'
-
+    
     meeting_id = Column('meeting_id', Integer,
                         ForeignKey('meetings.id'),
                         primary_key=True)
@@ -152,8 +152,14 @@ class MeetingItem(Base):
                      ForeignKey('items.id'),
                      primary_key=True)
 
+    agenda_num = Column(String)
     type = Column('type', AgendaItemType)
+    # order is by type
     order = Column('order', Integer)
+    # item order is order of all items
+    # this allows unknown council letter to mayor
+    # to stay on top of meeting items for sept 18 2012
+    item_order = Column('item_order', Integer)
     # I decided to consider keeping track of item
     # versions, and it probably should go in the
     # items table, but for now it is here.
@@ -162,10 +168,11 @@ class MeetingItem(Base):
     def __init__(self, meeting_id, item_id):
         self.meeting_id = meeting_id
         self.item_id = item_id
+        self.agenda_num = None
         self.type = None
         self.order = None
+        self.item_order = None
         
-
     def __repr__(self):
         return "<MeetingItem %d:%d>" % (self.meeting_id, self.item_id)
     

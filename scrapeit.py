@@ -26,7 +26,7 @@ if 'OPENSHIFT_POSTGRESQL_DB_HOST' in os.environ:
     dburl = "postgresql://%s:%s@%s:%s/leaflet"
     dburl = dburl % (dbuser, dbpass, dbhost, dbport)
 else:
-    dburl = "postgresql://dbadmin@bard/leaflet"
+    dburl = "postgresql://dbadmin@bard/hubby"
     
 
 
@@ -130,7 +130,7 @@ for meeting in meetings:
                 mm.add_collected_action(item['id'], action)
         s.commit()
     s.commit()
-    
+    mm._merge_collected_meeting_items(meeting, pmeeting)
     
 # next we tie the items to the meetings
 # todo

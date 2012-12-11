@@ -9,14 +9,32 @@ from hubby.util import legistar_id_guid
 from hubby.util import make_true_date
 
 from hubby.database import Department, Person
-from hubby.database import Meeting, Item
+from hubby.database import Meeting, Item, MeetingItem
 from hubby.database import ItemAction, Action, ActionVote
 from hubby.database import Attachment
+from hubby.database import AgendaItemTypeMap
 
 from hubby.collector import MainCollector
 from hubby.collector.rss import RssCollector
 
+def convert_agenda_number(agenda_number):
+    delimiter = '.-'
+    for delimiter in ['.-', ' - ', '-']:
+        if delimiter in agenda_number:
+            break
+    if delimiter in agenda_number:
+        itemtype, order = agenda_number.split(delimiter)
+        itemtype = AgendaItemTypeMap[itemtype]
+        order = int(order)
+    else:
+        itemtype = 'unknown'
+        if agenda_number:
+            order = int(agenda_number)
+        else:
+            order = None
+    return itemtype, order
 
+    
 
 class ModelManager(object):
     def __init__(self, session):
@@ -117,6 +135,43 @@ class ModelManager(object):
         self.session.merge(meeting)
         self.session.flush()
         transaction.commit()
+
+    def _merge_collected_meeting_items(self, meeting, collected):
+        transaction.begin()
+        items = collected['items']
+        item_count = 0
+        for item in items:
+            item_count += 1
+            item_id, guid = legistar_id_guid(item['item_page'])
+            query = self.session.query(MeetingItem)
+            query = query.filter_by(meeting_id=meeting.id)
+            query = query.filter_by(item_id=item_id)
+            try:
+                dbitem = query.one()
+            except NoResultFound:
+                dbitem = MeetingItem(meeting.id, item_id)
+            agenda_num = item['agenda_num']
+            ##########################################
+            ## Work around       #####################
+            ## irregular entries #####################
+            ##########################################
+            if agenda_num == '2011-0229':
+                agenda_num = None
+            if agenda_num == '1.':
+                agenda_num = '1'
+            ##########################################
+            ##                    ####################
+            ##                    ####################
+            ##########################################
+            if agenda_num is not None:
+                dbitem.agenda_num = agenda_num
+                dbitem.type, dbitem.order = convert_agenda_number(agenda_num)
+            dbitem.item_order = item_count
+            dbitem.version = int(item['version'])
+            self.session.merge(dbitem)
+            self.session.flush()
+        transaction.commit()
+        
         
     def merge_meeting_from_legistar(self, id):
         collector = MainCollector()
