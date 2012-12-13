@@ -186,7 +186,7 @@ class ModelManager(object):
         collector = MainCollector()
         collector.collect('dept')
         self.add_collected_depts(collector.result)
-        
+
     def add_collected_depts(self, depts):
         transaction.begin()
         for dept_info in depts:
@@ -197,6 +197,25 @@ class ModelManager(object):
         self.session.flush()
         transaction.commit()
 
+    def update_departments(self):
+        collector = MainCollector()
+        collector.collect('dept')
+        transaction.begin()
+        for dept_info in collector.result:
+            id, guid, name = dept_info
+            dept = self.session.query(Department).get(id)
+            if dept is None:
+                dept = Department(id, guid)
+                dept.name = name
+                self.session.add(dept)
+                continue
+            dept.id = id
+            dept.guid = guid
+            dept.name = name
+            self.session.add(dept)
+        self.session.flush()
+        transaction.commit()
+        
     def add_people(self):
         collector = MainCollector()
         collector.collect('people')

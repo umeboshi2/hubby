@@ -26,7 +26,7 @@ if 'OPENSHIFT_POSTGRESQL_DB_HOST' in os.environ:
     dburl = "postgresql://%s:%s@%s:%s/leaflet"
     dburl = dburl % (dbuser, dbpass, dbhost, dbport)
 else:
-    dburl = "postgresql://dbadmin@bard/hubby"
+    dburl = "postgresql://dbadmin@bard/leaflet"
     
 
 

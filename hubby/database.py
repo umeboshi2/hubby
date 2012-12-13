@@ -11,6 +11,8 @@ from sqlalchemy.orm import relationship, backref
 
 from sqlalchemy.ext.declarative import declarative_base
 
+from hubby.legistar import legistar_host
+
 Base = declarative_base()
 
 ####################################
@@ -337,6 +339,9 @@ class Attachment(Base):
     def __repr__(self):
         return "<Attachment:  id: %d>" % self.id
 
+    def get_link(self):
+        return 'http://%s/%s' % (legistar_host, self.link)
+    
 
 class Tag(Base):
     __tablename__ = 'tagnames'
@@ -369,10 +374,13 @@ class ItemTag(Base):
 #######################################################
 #######################################################
 
+Department.meetings = relationship(Meeting, order_by=Meeting.date)
+    
 # Meeting relationships
 meeting_backref = backref('meeting', uselist=False)
 
-Meeting.dept = relationship(Department, backref='meetings')
+Meeting.dept = relationship(Department)
+
 
 Meeting.items = relationship(Item, backref='meetings',
                              secondary='meeting_item')
