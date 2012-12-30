@@ -10,6 +10,7 @@ requires = [
     'mechanize',
     'beautifulsoup4',
     'transaction',     # I am not sure if I should use this or not
+    'PyPDF2',           # processing of legistar pdf's
     ]
 
 
@@ -32,6 +33,9 @@ track and analyze municipal legislation""",
       entry_points="""
       # -*- Entry points: -*-
       """,
+      dependency_links=[
+        'https://github.com/knowah/PyPDF2/archive/master.tar.gz#egg=PyPDF2-1.15dev',
+        ]
       )
 
 

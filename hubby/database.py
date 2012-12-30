@@ -370,6 +370,11 @@ class ItemTag(Base):
     def __repr__(self):
         return "<ItemTag: %s:%s>" % (self.id, self.tag)
     
+# ItemTag relationships
+Tag.items = relationship(Item, backref='tags',
+                             order_by=Item.id,
+                             secondary='item_tags')
+
     
 #######################################################
 #######################################################

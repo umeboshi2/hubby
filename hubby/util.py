@@ -5,6 +5,8 @@ import urlparse
 import urllib2
 from httplib import IncompleteRead
 
+from hubby.legistar import legistar_host
+
 class FileExistsError(Exception):
     pass
 
@@ -70,6 +72,27 @@ def rss_entry_updated(entry):
     uparsed = entry.updated_parsed
     updated = datetime.datetime(*uparsed[:6])
     return updated
+
+
+def _view_url(id, guid, type):
+    """Returns the url for for the agenda(A)/minutes(M) from a meeting identified
+    by id, guid"""
+    host = legistar_host
+    url_template = 'http://%s/View.ashx?M=%s&ID=%d&GUID=%s'
+    url = url_template % (host, type, id, guid)
+    return url
+
+def agenda_url(id, guid):
+    """Returns the url for for the agenda from a meeting identified
+    by id, guid"""
+    return _view_url(id, guid, 'A')
+
+def minutes_url(id, guid):
+    """Returns the url for for the agenda from a meeting identified
+    by id, guid"""
+    return _view_url(id, guid, 'M')
+    
+
 
 #################################
 #################################
