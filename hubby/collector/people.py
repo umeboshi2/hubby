@@ -19,7 +19,6 @@ class PeopleCollector(BaseCollector):
         self.people_url = 'http://hattiesburg.legistar.com/People.aspx'
         self.url_prefix = 'http://hattiesburg.legistar.com/'
         
-
     def _get_people_anchors(self):
         self.set_url(self.people_url)
         self.retrieve_page()
@@ -43,7 +42,6 @@ class PeopleCollector(BaseCollector):
             ids[id] = name
         return ids
     
-    
     def _get_person_page(self, link):
         url = self.url_prefix + link
         self.set_url(url)
@@ -65,7 +63,7 @@ class PeopleCollector(BaseCollector):
                 tags = page.find_all('img', id=exp)
                 ttype = 'img'
             if not tags:
-                raise RuntimeError , "no tags found for %s" % key
+                raise RuntimeError("no tags found for %s" % key)
             if len(tags) > 1:
                 print "len(%s) == %d" % (key, len(tags))
             tag = tags[0]

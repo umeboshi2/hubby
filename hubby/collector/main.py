@@ -20,13 +20,13 @@ class PickleCollector(object):
         self.item = ItemCollector()
         self.action = ActionCollector()
         self.dir = 'data'
-        
+
         self._collectors = dict(people=self.people,
                                 depts=self.depts,
                                 meeting=self.meeting,
                                 item=self.item,
                                 action=self.action)
-        
+
     def _collector(self, type):
         return self._collectors[type]
 
@@ -42,9 +42,8 @@ class PickleCollector(object):
         elif type == 'action':
             filename = 'action-%d.pickle' % id
         else:
-            raise RuntimeError , 'unknown type'
+            raise RuntimeError('unknown type')
         return os.path.join(self.dir, filename)
-    
 
     def collect(self, type, link=None):
         id = None
@@ -61,11 +60,6 @@ class PickleCollector(object):
             collector.collect()
             Pickle.dump(collector.result, file(filename, 'w'))
         return Pickle.load(file(filename))
-        
-        
-    
-        
-    
 
 
 class _MainCollector(PeopleCollector, DeptCollector,
@@ -88,7 +82,7 @@ class MainCollector(_MainCollector):
 
     def collect(self, ctype):
         self._map[ctype].collect(self)
-        
+
 
 if __name__ == "__main__":
     murl = 'http://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
@@ -97,4 +91,3 @@ if __name__ == "__main__":
     aurl = 'http://hattiesburg.legistar.com/HistoryDetail.aspx?ID=6153632&GUID=1376DD13-58E1-443A-9A2E-F218CE70C4B6'
     mc = MainCollector()
     mc.set_url(murl)
-    

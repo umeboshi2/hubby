@@ -20,7 +20,6 @@ Base = declarative_base()
 ####################################
 
 
-
 FileType = Enum('agenda', 'minutes', 'attachment',
                 name='file_type')
 
@@ -37,6 +36,7 @@ AgendaItemTypeMap = dict(V='presentation', VI='policy',
 ## Tables                         ##
 ####################################
 
+
 class Department(Base):
     __tablename__ = 'departments'
     id = Column(Integer, primary_key=True)
@@ -50,6 +50,7 @@ class Department(Base):
 
     def __repr__(self):
         return '<Dept: %d - %s>' % (self.id, self.name)
+
 
 class Person(Base):
     __tablename__ = 'people'
@@ -109,6 +110,7 @@ class Meeting(Base):
     def __repr__(self):
         return "<Meeting(%d): '%s'>" % (self.id, self.title)
     
+
 class Item(Base):
     __tablename__ = 'items'
 
@@ -144,6 +146,7 @@ class Item(Base):
         tmpl = 'LegislationDetail.aspx?ID=%d&GUID=%s&Options=&Search='
         return tmpl % (self.id, self.guid)
     
+
 class MeetingItem(Base):
     __tablename__ = 'meeting_item'
     
@@ -228,7 +231,6 @@ class ItemAction(Base):
         self.item_id = item_id
         self.action_id = action_id
         
-
     def __repr__(self):
         return "<ItemAction %d:%d>" % (self.item_id, self.action_id)
     
@@ -271,7 +273,6 @@ class File(Base):
         
     def __repr__(self):
         return "<File:  id: %d>" % self.id
-    
     
     
 class Agenda(Base):
@@ -397,7 +398,6 @@ Meeting.agenda = relationship(Agenda, uselist=False,
                               backref=meeting_backref)
 Meeting.minutes = relationship(Minutes, uselist=False,
                                backref=meeting_backref)
-
 
 
 # MeetingItem relationships

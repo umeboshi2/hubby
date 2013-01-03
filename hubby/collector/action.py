@@ -22,7 +22,7 @@ class ActionCollector(BaseCollector):
         tables = page.find_all('table', class_='rgMasterTable')
         if len(tables) != 1:
             msg = "Problem with determining master table len(tables) = %d"
-            raise RuntimeError , msg % len(tables)
+            raise RuntimeError(msg % len(tables))
         table = tables.pop()
         items = []
         for row in table.find_all('tr')[1:]:
@@ -82,4 +82,3 @@ if __name__ == "__main__":
     ac = ActionCollector()
     ac.retrieve_page(url)
     i = ac._get_action(ac.soup)
-    

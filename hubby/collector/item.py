@@ -19,6 +19,7 @@ ITEM_DATA_IDENTIFIERS = dict(file_id='_lblFile2',
                         action_details='_hypDetails'
                         )
 
+
 class ItemCollector(BaseCollector):
     def _get_item(self, page):
         markers = ITEM_DATA_IDENTIFIERS
@@ -74,7 +75,6 @@ class ItemCollector(BaseCollector):
         self.result = self.item
         
     
-                
 if __name__ == "__main__":
     url = 'http://hattiesburg.legistar.com/LegislationDetail.aspx?ID=1221728&GUID=9CC815CB-387A-42BF-B442-B80F953CB51E&Options=&Search='
     url = 'http://hattiesburg.legistar.com/LegislationDetail.aspx?ID=1195041&GUID=8DB3A9EB-569C-477C-9F3B-B04EFD8AA955&Options=&Search='
@@ -83,4 +83,3 @@ if __name__ == "__main__":
     ic.retrieve_page()
     ic.collect()
     i = ic.item
-    

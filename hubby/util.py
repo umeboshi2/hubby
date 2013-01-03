@@ -7,17 +7,22 @@ from httplib import IncompleteRead
 
 from hubby.legistar import legistar_host
 
+
 class FileExistsError(Exception):
     pass
 
+
 class BadDownloadError(Exception):
     pass
+
 
 class InvalidDateFormat(Exception):
     pass
 
 # Tidy function inspired by:
-#http://www.toao.net/48-replacing-smart-quotes-and-em-dashes-in-mysql
+# http://www.toao.net/48-replacing-smart-quotes-and-em-dashes-in-mysql
+
+
 def tidy_needless_utf_punctuation(data):
     data = data.replace('\xe2\x80\x98', "'")
     data = data.replace('\xe2\x80\x99', "'")
@@ -31,24 +36,27 @@ def tidy_needless_utf_punctuation(data):
 
 def random_wait(minimum=5, maximum=15, msg=''):
     #seconds = random.randint(minimum, maximum)
-    seconds = random.random()*5 + 1
+    seconds = random.random() * 5 + 1
     if msg:
         template_data = dict(seconds=seconds)
         msg = msg % template_data
         print msg
     time.sleep(seconds)
 
+
 def parse_date_string(datestring):
     dlist = datestring.split('/')
     if len(dlist) != 3:
-        raise InvalidDateFormat, "Invalid date string: %s" % datestring
+        raise InvalidDateFormat("Invalid date string: %s" % datestring)
     dlist = map(int, dlist)
     proper = dlist[2], dlist[0], dlist[1]
     return proper
 
+
 def make_true_date(datestring):
     proper = parse_date_string(datestring)
     return datetime.date(*proper)
+
 
 def parse_legistar_cgi_query(link):
     uparse = urlparse.urlparse(link)
@@ -57,6 +65,7 @@ def parse_legistar_cgi_query(link):
     items = [item.split('=') for item in item_split]
     parsed = dict(items)
     return parsed
+
 
 def legistar_id_guid(link):
     plink = parse_legistar_cgi_query(link)
@@ -67,6 +76,7 @@ def legistar_id_guid(link):
 
 def onclick_link(attribute):
     return attribute.split("'")[1]
+
 
 def rss_entry_updated(entry):
     uparsed = entry.updated_parsed
@@ -82,16 +92,17 @@ def _view_url(id, guid, type):
     url = url_template % (host, type, id, guid)
     return url
 
+
 def agenda_url(id, guid):
     """Returns the url for for the agenda from a meeting identified
     by id, guid"""
     return _view_url(id, guid, 'A')
 
+
 def minutes_url(id, guid):
     """Returns the url for for the agenda from a meeting identified
     by id, guid"""
     return _view_url(id, guid, 'M')
-    
 
 
 #################################

@@ -17,6 +17,7 @@ from hubby.database import AgendaItemTypeMap
 from hubby.collector import MainCollector
 from hubby.collector.rss import RssCollector
 
+
 def convert_agenda_number(agenda_number):
     delimiter = '.-'
     for delimiter in ['.-', ' - ', '-']:
@@ -34,7 +35,6 @@ def convert_agenda_number(agenda_number):
             order = None
     return itemtype, order
 
-    
 
 class ModelManager(object):
     def __init__(self, session):
@@ -45,7 +45,7 @@ class ModelManager(object):
 
     def collector(self):
         return MainCollector()
-    
+
     # entry is rss entry
     def add_meeting_from_rss(self, entry):
         transaction.begin()
@@ -72,13 +72,12 @@ class ModelManager(object):
         meeting = self.remote_meeting(link)
         info = meeting['info']
         return info
-    
+
     def remote_meeting_items(self, link):
         meeting = self.remote_meeting(link)
         items = meeting['items']
         return items
 
-    
     # link is relative from legistar prefix
     def _remote_legislation_item(self, link):
         print "using link", link
@@ -114,13 +113,11 @@ class ModelManager(object):
             leg_items.append(leg_item)
         return leg_items
 
-
     def merge_remote_meeting_items(self, meeting_id):
         pass
-    
+
     def merge_remote_legislation_items(self, meeting_id):
         pass
-    
 
     # meeting is db object, collected is from collector
     def _merge_collected_meeting(self, meeting, collected):
@@ -171,17 +168,14 @@ class ModelManager(object):
             self.session.merge(dbitem)
             self.session.flush()
         transaction.commit()
-        
-        
+
     def merge_meeting_from_legistar(self, id):
         collector = MainCollector()
         meeting = self.session.query(Meeting).filter_by(id=id).one()
         collector.set_url(meeting.link)
         collector.collect('meeting')
         self._merge_collected_meeting(meeting, collector.meeting)
-        
 
-    
     def add_departments(self):
         collector = MainCollector()
         collector.collect('dept')
@@ -215,12 +209,12 @@ class ModelManager(object):
             self.session.add(dept)
         self.session.flush()
         transaction.commit()
-        
+
     def add_people(self):
         collector = MainCollector()
         collector.collect('people')
         self.add_collected_people(collector.result)
-        
+
     def add_collected_people(self, people):
         transaction.begin()
         for pinfo in people:
@@ -230,7 +224,6 @@ class ModelManager(object):
             self.session.add(person)
         self.session.flush()
         transaction.commit()
-        
 
     def get_rss(self, url):
         collector = RssCollector()
@@ -274,7 +267,6 @@ class ModelManager(object):
             person_id, ignore = legistar_id_guid(link)
             avote = ActionVote(dbaction.id, person_id, vote)
             self.session.add(avote)
-        
 
     # add the item before the actions
     def _add_collected_legislation_item(self, item):
@@ -299,9 +291,9 @@ class ModelManager(object):
                     self.session.add(attachment)
                 else:
                     msg = 'Duplicate attachment %d' % id
-                    raise RuntimeError, msg
+                    raise RuntimeError(msg)
         transaction.commit()
-        
+
     # here item is an item collected from
     # legistar
     def add_new_legislation_item(self, item):
@@ -314,4 +306,3 @@ class ModelManager(object):
             self.add_collected_action(item['id'], collector.action)
         self.session.flush()
         transaction.commit()
-    

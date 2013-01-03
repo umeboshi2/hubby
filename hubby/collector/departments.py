@@ -10,27 +10,25 @@ class DeptCollector(BaseCollector):
         BaseCollector.__init__(self)
         url = 'http://hattiesburg.legistar.com/Departments.aspx'
         self.set_url(url)
-        
+
     def _get_depts(self, page):
         depts = []
         # each entry is a tuple (id, guid, name)
-        anchors = page.find_all('a',id=re.compile('.+_hypBody$'))
+        anchors = page.find_all('a', id=re.compile('.+_hypBody$'))
         for anchor in anchors:
             id, guid = legistar_id_guid(anchor['href'])
             name = anchor.text.strip()
             depts.append((id, guid, name))
         return depts
-    
-    
+
     def collect(self):
         self.retrieve_page(self.url)
         self.depts = self._get_depts(self.soup)
         self.result = self.depts
-        
-    
-                
+
+
 if __name__ == "__main__":
-    
+
     dc = DeptCollector()
     dc.retrieve_page(url)
     dc.collect()

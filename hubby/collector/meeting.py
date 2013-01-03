@@ -27,11 +27,12 @@ MEETING_ITEM_COLUMNS = ['file_id',
                         'video'
                         ]
 
+
 class MeetingCollector(BaseCollector):
     def _get_meeting_info(self, page):
-        info = { 'anchors' : {},
-                 'spans' : {}
-                 }
+        info = {'anchors': {},
+                'spans': {}
+                }
         for key in SPANIDS:
             exp = re.compile('.+%s$' % SPANIDS[key])
             spans = page.find_all('span', id=exp)
@@ -42,10 +43,10 @@ class MeetingCollector(BaseCollector):
             exp = re.compile('.+%s$' % ANCHORIDS[key])
             anchors = page.find_all('a', id=exp)
             if len(anchors) != 1:
-                raise RuntimeError , "No anchor for %s" % key
+                raise RuntimeError("No anchor for %s" % key)
             info['anchors'][key] = anchors[0]
-        return info        
-    
+        return info
+
     def _prepare_meeting_info(self, info):
         newinfo = {}
         for key in info['anchors'].keys():
@@ -77,7 +78,7 @@ class MeetingCollector(BaseCollector):
         tables = page.find_all('table', class_='rgMasterTable')
         if len(tables) > 1:
             msg = "Problem with determining master table len(tables) = %d"
-            raise RuntimeError , msg % len(tables)
+            raise RuntimeError(msg % len(tables))
         elif not tables:
             return []
         table = tables.pop()
@@ -90,7 +91,7 @@ class MeetingCollector(BaseCollector):
             item = self._make_meeting_item(row)
             items.append(item)
         return items
-    
+
     def get_meeting(self, page):
         items = self.get_meeting_items(page)
         info = self.get_meeting_info(page)
@@ -105,9 +106,8 @@ class MeetingCollector(BaseCollector):
         self.retrieve_page(url=self.url)
         self.meeting = self.get_meeting(self.soup)
         self.result = self.meeting
-        
-    
-                
+
+
 if __name__ == "__main__":
     url = 'http://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
     mc = MeetingCollector()

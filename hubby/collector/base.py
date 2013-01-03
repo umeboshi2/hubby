@@ -18,7 +18,7 @@ class BaseCollector(object):
         else:
             self.url = url
         if url is None:
-            raise RuntimeError , "No url set."
+            raise RuntimeError("No url set.")
         self.response = self.browser.open(url)
         self.info = self.response.info()
         self.content = self.response.read()
@@ -33,7 +33,7 @@ class BaseCollector(object):
 
     def collect(self):
         pass
-    
-                
+
+
 if __name__ == "__main__":
     url = 'http://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
