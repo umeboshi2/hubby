@@ -3,6 +3,7 @@ import time
 import datetime
 import urlparse
 import urllib2
+import httplib
 from httplib import IncompleteRead
 
 from hubby.legistar import legistar_host
@@ -138,17 +139,20 @@ def handle_link(uri):
             data['length'] = length
     return data
 
+# http://stackoverflow.com/a/14206036/1869821
+# http://bobrochel.blogspot.co.nz/2010/11/bad-servers-chunked-encoding-and.html
+def patch_http_response_read(func):
+    def inner(*args):
+        try:
+            return func(*args)
+        except httplib.IncompleteRead, e:
+            return e.partial
+    return inner
+httplib.HTTPResponse.read = patch_http_response_read(httplib.HTTPResponse.read)
 
 def get_rss_feed(url):
     response = urllib2.urlopen(url)
-    read_it = True
-    content = ''
-    while read_it:
-        try:
-            content += response.read(1)
-        except IncompleteRead:
-            read_it = False
-    return content, response.info()
+    return response.read(), response.info()
 
 
 if __name__ == "__main__":
