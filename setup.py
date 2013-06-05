@@ -16,7 +16,7 @@ requires = [
 
 setup(name='hubby',
       version=version,
-      setup_requires=['github-distutils >= 0.1.0'],
+      setup_requires=[],
       description="track and analyze municipal legislation",
       long_description="""\
 track and analyze municipal legislation""",
