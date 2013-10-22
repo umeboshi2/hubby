@@ -10,9 +10,19 @@ DATA_IDENTIFIERS = dict(
     lastname='_lblLast',
     website='_hypWebSite',
     notes='_lblNotes',
-    photo_link='_imgPhoto'
     )
+# photo_link no longer on people page
+#    photo_link='_imgPhoto'
+#    )
 
+
+# dave ware's page
+# https://hattiesburg.legistar.com/PersonDetail.aspx?ID=83530&GUID=62048E45-5276-44A8-8413-19B46071AA96&Search=
+# I will probably need to start using selenium to collect
+# the information from legistar, as a full list of people
+# is only available through a javascript post.
+
+dware_link = 'PersonDetail.aspx?ID=83530&GUID=62048E45-5276-44A8-8413-19B46071AA96&Search='
 class PeopleCollector(BaseCollector):
     def __init__(self):
         BaseCollector.__init__(self)
@@ -31,6 +41,11 @@ class PeopleCollector(BaseCollector):
         people_links = []
         for anchor in anchors:
             people_links.append(anchor['href'])
+        # FIXME: hacky way of putting former people
+        # into database.  This is done manually until
+        # a better way of accessing the website presents
+        # itself.
+        people_links.append(dware_link)
         return people_links
         
     def get_people_ids(self):
@@ -71,7 +86,8 @@ class PeopleCollector(BaseCollector):
                 item[key] = tag['src']
                 continue
             if key == 'website':
-                item[key] = tag['href']
+                #item[key] = tag['href']
+                item[key] = tag.text.strip()
                 continue
             item[key] = tag.text.strip()
         item['id'], item['guid'] = legistar_id_guid(self.url)

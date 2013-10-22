@@ -16,3 +16,5 @@ RSS_THIS_MONTH = 'http://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=517515
 RSS_YEAR_2011 = 'http://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=517521&GUID=519a4642-ea34-4238-8c5d-68ba5056030f&Mode=2011&Title=City+of+Hattiesburg,+MS+-+Calendar+(2011)'
 
 RSS_YEAR_2012 = 'http://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=517522&GUID=ba87113e-9748-46cc-bed7-09923264420b&Mode=2012&Title=City+of+Hattiesburg,+MS+-+Calendar+(2012)'
+
+RSS_YEAR_2013 = 'https://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=899558&GUID=c71a2185-d86d-484e-b6bc-d7edbfaf07fe&Mode=2013&Title=City+of+Hattiesburg%2c+MS+-+Calendar+%282013%29'
