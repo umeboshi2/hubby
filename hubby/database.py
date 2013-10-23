@@ -21,20 +21,36 @@ Base = declarative_base()
 
 
 FileType = Enum('agenda', 'minutes', 'attachment',
-                name='file_type')
+                name='file_type_enum')
 
 AgendaItemType = Enum('presentation', 'policy', 'routine', 'unknown',
-                      name='agenda_item_type')
+                      name='agenda_item_type_enum')
 
 VoteType = Enum('Yea', 'Nay', 'Abstain', 'Absent', 'Present',
-                name='vote_type')
+                name='vote_type_enum')
 
 AgendaItemTypeMap = dict(V='presentation', VI='policy',
                          VII='routine')
 
+
+CacheType = Enum('action', 'departments', 'item', 'meeting',
+                 'people', 'rss-2011', 'rss-2012', 'rss-2013',
+                 'rss-this-month',
+                 name='cache_type_enum')
+
+
 ####################################
 ## Tables                         ##
 ####################################
+
+class MainCache(Base):
+    __tablename__ = 'main_cache'
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode(200), unique=True)
+    retrieved = Column(DateTime)
+    updated = Column(DateTime)
+    content = Column(PickleType)
+
 
 
 class Department(Base):

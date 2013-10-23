@@ -1,5 +1,6 @@
 import os
 import cPickle as Pickle
+from datetime import datetime
 
 from hubby.util import legistar_id_guid
 
@@ -45,6 +46,41 @@ class PickleCollector(object):
             raise RuntimeError('unknown type')
         return os.path.join(self.dir, filename)
 
+    def _dbname(self, type, id=None):
+        if type == 'people':
+            dbname = 'people'
+        elif type == 'depts':
+            dbname = 'departments'
+        elif type == 'meeting':
+            dbname = 'meeting-%d' % id
+        elif type == 'item':
+            dbname = 'item-%d' % id
+        elif type == 'action':
+            dbname = 'action-%d' % id
+        else:
+            raise RuntimeError('unknown type')
+        return dbname
+
+    def make_cache_object(self, type, link=None):
+        from hubby.database import MainCache
+        id = None
+        if type in ['meeting', 'item', 'action']:
+            id, guid = legistar_id_guid(link)
+        filename = self._filename(type, id)
+        dbname = self._dbname(type, id)
+        if os.path.isfile(filename):
+            content = Pickle.load(file(filename))
+            now = datetime.now()
+            mc = MainCache()
+            mc.name = dbname
+            mc.retrieved = now
+            mc.updated = now
+            mc.content = content
+        else:
+            raise RuntimeError, "No file present %s" % filename
+        return mc
+    
+        
     def collect(self, type, link=None):
         id = None
         if type in ['meeting', 'item', 'action']:

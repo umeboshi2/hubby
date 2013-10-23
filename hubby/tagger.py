@@ -20,7 +20,8 @@ DEFAULT_TAGNAMES = [
     'ClaimsDocket',
     'MonthlyBudgetReport',
     'FEMA',
-    'HomelandSecurity'
+    'HomelandSecurity',
+    'Appointment',
     ]
 
 def add_tag_names(session):
@@ -125,7 +126,15 @@ def tag_item_for_Homeland_Security(session, item):
     title = item.title
     if 'Homeland Security' in title:
         tag_item(session, item, 'HomelandSecurity')
-        
+
+def tag_item_for_appointment(session, item):
+    title = item.title
+    title = title.lower()
+    if 'appoint' in title:
+        tag_item(session, item, 'Appointment')
+
+    pass
+
 TAGGERS = [
     tag_item_for_ordinance,
     tag_item_for_planning_commission,
@@ -136,7 +145,8 @@ TAGGERS = [
     tag_item_for_HOME,
     tag_item_for_Claims_Docket,
     tag_item_for_monthly_budget_report,
-    tag_item_for_FEMA
+    tag_item_for_FEMA,
+    tag_item_for_appointment,
     ]
 
 def tag_items(session, items):

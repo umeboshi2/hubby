@@ -10,6 +10,7 @@ DATA_IDENTIFIERS = dict(
     lastname='_lblLast',
     website='_hypWebSite',
     notes='_lblNotes',
+    photo_link='_imgPhoto',
     )
 # photo_link no longer on people page
 #    photo_link='_imgPhoto'
@@ -67,6 +68,8 @@ class PeopleCollector(BaseCollector):
         item_keys = markers.keys()
         item = {}.fromkeys(item_keys)
         for key in item_keys:
+            if key == 'photo_link':
+                no_pix = False
             #print "trying for key", key
             exp = re.compile('.+%s$' % markers[key])
             tags = page.find_all('span', id=exp)
@@ -78,18 +81,26 @@ class PeopleCollector(BaseCollector):
                 tags = page.find_all('img', id=exp)
                 ttype = 'img'
             if not tags:
-                raise RuntimeError("no tags found for %s" % key)
+                if ttype == 'img' and key == 'photo_link':
+                    no_pix = True
+                else:
+                    raise RuntimeError("no tags found for %s" % key)
             if len(tags) > 1:
                 print "len(%s) == %d" % (key, len(tags))
-            tag = tags[0]
             if key == 'photo_link':
-                item[key] = tag['src']
+                if not no_pix:
+                    tag = tags[0]
+                    item[key] = tag['src']
+                else:
+                    item[key] = None
                 continue
+            tag = tags[0]
             if key == 'website':
                 #item[key] = tag['href']
                 item[key] = tag.text.strip()
                 continue
             item[key] = tag.text.strip()
+            print key, item[key]
         item['id'], item['guid'] = legistar_id_guid(self.url)
         return item
     
