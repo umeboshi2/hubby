@@ -17,6 +17,14 @@ from hubby.database import AgendaItemTypeMap
 from hubby.collector import MainCollector
 from hubby.collector.rss import RssCollector
 
+timeformat = '%I:%M %p'
+
+def convert_range_to_datetime(start, end):
+    "start and end are timestamps"
+    start = datetime.fromtimestamp(float(start))
+    end = datetime.fromtimestamp(float(end))
+    return start, end
+    
 
 def convert_agenda_number(agenda_number):
     delimiter = '.-'
@@ -45,6 +53,21 @@ class ModelManager(object):
 
     def collector(self):
         return MainCollector()
+
+    def _range_filter(self, query, start, end):
+        query = query.filter(Meeting.date >= start)
+        query = query.filter(Meeting.date <= end)
+        return query
+    
+    def get_ranged_meetings(self, start, end, timestamps=False):
+        if timestamps:
+            start, end = convert_range_to_datetime(start, end)
+        q = self.session.query(Meeting)
+        q = self._range_filter(q, start, end)
+        return q.all()
+    
+    
+    
 
     # entry is rss entry
     def add_meeting_from_rss(self, entry):
