@@ -28,7 +28,7 @@ def convert_range_to_datetime(start, end):
 
 def convert_agenda_number(agenda_number):
     delimiter = '.-'
-    for delimiter in ['.-', ' - ', '-']:
+    for delimiter in ['.-', '. - ', ' - ', '-']:
         if delimiter in agenda_number:
             break
     if delimiter in agenda_number:
