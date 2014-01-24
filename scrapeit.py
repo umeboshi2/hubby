@@ -76,9 +76,13 @@ from hubby.legistar import RSS_YEAR_2013
 y1 = RSS_YEAR_2011, 'data/y1.rss'
 y2 = RSS_YEAR_2012, 'data/y2.rss'
 y3 = RSS_YEAR_2013, 'data/y3.rss'
+
+# FIXME: this may not be the proper 2014 url
+y4 = RSS_YEAR_2013, 'data/y4.rss'
+
 m1 = RSS_THIS_MONTH, 'data/m1.rss'
 
-ulist = [y1, y2, y3, m1]
+ulist = [y1, y2, y3, y4, m1]
 rsslist = []
 for url, filename in ulist:
     if os.path.exists(filename):
