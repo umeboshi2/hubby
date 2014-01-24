@@ -45,12 +45,15 @@ if not os.path.isdir(pc.dir):
     os.makedirs(pc.dir)
     
 def check_dupe_item(item):
+    Dupe = True
+    if 'id' not in item:
+        print "Bad item", item
+        return Dupe
     dbitem = s.query(Item).get(item['id'])
     if dbitem is None:
         return False
     filtered_keys = ['attachments', 'action_details']
     keys = [k for k in item.keys() if k not in filtered_keys]
-    Dupe = True
     for key in keys:
         if getattr(dbitem, key) != item[key]:
             Dupe = False
@@ -128,6 +131,8 @@ for meeting in meetings:
         if not check_dupe_item(item):
             print "adding item %d to database." % item['id']
             mm._add_collected_legislation_item(item)
+        if 'action_details' not in item:
+            item['action_details'] = []
         for link in item['action_details']:
             action = pc.collect('action', link=link)
             dbaction = s.query(Action).get(action['id'])

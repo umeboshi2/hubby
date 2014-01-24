@@ -61,6 +61,14 @@ class ItemCollector(BaseCollector):
     
     def collect(self):
         self.retrieve_page(self.url)
+        if 'Invalid parameters!' in self.content:
+            item = dict()
+            item['action_details'] = []
+            item['bad_url'] = url
+            self.item = item
+            self.result = self.item
+            print "Invalid parameters found", self.result
+            return
         self.item = self._get_item(self.soup)
         for key in ['passed', 'introduced', 'on_agenda']:
             if key in self.item and not self.item[key]:
