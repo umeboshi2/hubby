@@ -74,14 +74,14 @@ if not len(depts):
     s.commit()
 
 from hubby.legistar import RSS_THIS_MONTH, RSS_YEAR_2011, RSS_YEAR_2012
-from hubby.legistar import RSS_YEAR_2013
+from hubby.legistar import RSS_YEAR_2013, RSS_YEAR_2014
 
 y1 = RSS_YEAR_2011, 'data/y1.rss'
 y2 = RSS_YEAR_2012, 'data/y2.rss'
 y3 = RSS_YEAR_2013, 'data/y3.rss'
 
 # FIXME: this may not be the proper 2014 url
-y4 = RSS_YEAR_2013, 'data/y4.rss'
+y4 = RSS_YEAR_2014, 'data/y4.rss'
 
 m1 = RSS_THIS_MONTH, 'data/m1.rss'
 

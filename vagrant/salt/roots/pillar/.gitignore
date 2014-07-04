@@ -40,9 +40,5 @@ nosetests.xml
 .#*
 
 # my development cruft
+.sass-cache
 demo.sqlite
-
-
-# vagrant
-.vagrant
-

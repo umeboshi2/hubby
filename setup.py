@@ -11,6 +11,15 @@ requires = [
     'beautifulsoup4',
     'transaction',     # I am not sure if I should use this or not
     'PyPDF2',           # processing of legistar pdf's
+    'pyramid',
+    'pyramid_tm',
+    'pyramid_debugtoolbar',
+    'zope.sqlalchemy',
+    'pyramid-beaker',
+    'pyramid-mako',
+    'waitress',
+    'requests',
+    'cornice',
     ]
 
 
@@ -29,9 +38,14 @@ track and analyze municipal legislation""",
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       include_package_data=True,
       zip_safe=False,
+      #test_suite='hubby',
       install_requires=requires,
-      entry_points="""
+      entry_points="""\
       # -*- Entry points: -*-
+      [paste.app_factory]
+      main = hubby:main
+      [console_scripts]
+      initialize_hubby_db = hubby.scripts.initializedb:main
       """,
       dependency_links=[
         'https://github.com/knowah/PyPDF2/archive/master.tar.gz#egg=PyPDF2-1.15dev',

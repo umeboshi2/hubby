@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Sequence, Column, ForeignKey
 
 # column types
@@ -39,11 +41,29 @@ CacheType = Enum('action', 'departments', 'item', 'meeting',
                  name='cache_type_enum')
 
 
+class SerialBase(object):
+    def serialize(self):
+        data = dict()
+        table = self.__table__
+        for column in table.columns:
+            name = column.name
+            try:
+                pytype = column.type.python_type
+            except NotImplementedError:
+                print "NOTIMPLEMENTEDERROR", column.type
+            value = getattr(self, name)
+            if pytype is datetime:
+                value = value.isoformat()
+            data[name] = value
+        return data
+    
+
+    
 ####################################
 ## Tables                         ##
 ####################################
 
-class MainCache(Base):
+class MainCache(Base, SerialBase):
     __tablename__ = 'main_cache'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(200), unique=True)
@@ -53,7 +73,7 @@ class MainCache(Base):
 
 
 
-class Department(Base):
+class Department(Base, SerialBase):
     __tablename__ = 'departments'
     id = Column(Integer, primary_key=True)
     guid = Column(String)
@@ -68,7 +88,7 @@ class Department(Base):
         return '<Dept: %d - %s>' % (self.id, self.name)
 
 
-class Person(Base):
+class Person(Base, SerialBase):
     __tablename__ = 'people'
 
     id = Column(Integer, primary_key=True)
@@ -93,7 +113,7 @@ class Person(Base):
         return msg  % (self.id, self.firstname, self.lastname)
     
 
-class Meeting(Base):
+class Meeting(Base, SerialBase):
     __tablename__ = 'meetings'
 
     id = Column(Integer, primary_key=True)
@@ -127,7 +147,7 @@ class Meeting(Base):
         return "<Meeting(%d): '%s'>" % (self.id, self.title)
     
 
-class Item(Base):
+class Item(Base, SerialBase):
     __tablename__ = 'items'
 
     id = Column(Integer, primary_key=True)
@@ -163,7 +183,7 @@ class Item(Base):
         return tmpl % (self.id, self.guid)
     
 
-class MeetingItem(Base):
+class MeetingItem(Base, SerialBase):
     __tablename__ = 'meeting_item'
     
     meeting_id = Column('meeting_id', Integer,
@@ -198,7 +218,7 @@ class MeetingItem(Base):
         return "<MeetingItem %d:%d>" % (self.meeting_id, self.item_id)
     
     
-class Action(Base):
+class Action(Base, SerialBase):
     __tablename__ = 'actions'
 
     id = Column(Integer, primary_key=True)
@@ -233,7 +253,7 @@ class Action(Base):
         return "<Action: %s, id: %d>" % (self.file_id, self.id)
     
 
-class ItemAction(Base):
+class ItemAction(Base, SerialBase):
     __tablename__ = 'item_action'
 
     item_id = Column('item_id', Integer,
@@ -251,7 +271,7 @@ class ItemAction(Base):
         return "<ItemAction %d:%d>" % (self.item_id, self.action_id)
     
 
-class ActionVote(Base):
+class ActionVote(Base, SerialBase):
     __tablename__ = 'action_vote'
 
     action_id = Column('action_id', Integer,
@@ -272,7 +292,7 @@ class ActionVote(Base):
         return "<ActionVote %d:%d  %s>" % infotuple
 
 
-class File(Base):
+class File(Base, SerialBase):
     __tablename__ = 'files'
 
     id = Column(Integer,
@@ -291,7 +311,7 @@ class File(Base):
         return "<File:  id: %d>" % self.id
     
     
-class Agenda(Base):
+class Agenda(Base, SerialBase):
     __tablename__ = 'agendas'
 
     id = Column(Integer, ForeignKey('meetings.id'),
@@ -312,7 +332,7 @@ class Agenda(Base):
         return "<Agenda:  id: %d>" % self.id
     
     
-class Minutes(Base):
+class Minutes(Base, SerialBase):
     __tablename__ = 'minutes'
 
     id = Column(Integer, ForeignKey('meetings.id'),
@@ -333,7 +353,7 @@ class Minutes(Base):
         return "<Minutes:  id: %d>" % self.id
     
     
-class Attachment(Base):
+class Attachment(Base, SerialBase):
     __tablename__ = 'attachments'
 
     id = Column(Integer, primary_key=True)
@@ -360,7 +380,7 @@ class Attachment(Base):
         return 'http://%s/%s' % (legistar_host, self.link)
     
 
-class Tag(Base):
+class Tag(Base, SerialBase):
     __tablename__ = 'tagnames'
 
     name = Column(String, primary_key=True)
@@ -372,7 +392,7 @@ class Tag(Base):
         return "<Tag: %s>" % self.name
     
 
-class ItemTag(Base):
+class ItemTag(Base, SerialBase):
     __tablename__ = 'item_tags'
 
     id = Column(Integer, ForeignKey('items.id'),
