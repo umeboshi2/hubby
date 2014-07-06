@@ -21,13 +21,28 @@ class PersonManager(BaseManager):
     def query(self):
         return self.session.query(Person)
 
+    def _notrans_add(self, data):
+        p = Person()
+        for key, value in data.items():
+            setattr(p, key, value)
+        self.session.add(p)
+        return p
+    
     def add(self, data):
         with transaction.manager:
-            p = Person()
-            for key, value in data.items():
-                setattr(p, key, value)
-            self.session.add(p)
+            p = self._notrans_add(data)
         return self.session.merge(p)
+
+    def add_people(self, people):
+        plist = []
+        with transaction.manager:
+            for pinfo in people:
+                p = self._notrans_add(pinfo)
+                plist.append(p)
+        return [self.session.merge(p) for p in plist]
+
+                
+                
 
     
         
