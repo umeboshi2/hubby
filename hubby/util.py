@@ -34,6 +34,12 @@ def tidy_needless_utf_punctuation(data):
     data = data.replace('\xe2\x80\xa6', "...")
     return data
 
+def convert_range_to_datetime(start, end):
+    "start and end are timestamps"
+    start = datetime.datetime.fromtimestamp(float(start))
+    end = datetime.datetime.fromtimestamp(float(end))
+    return start, end
+    
 
 def random_wait(minimum=5, maximum=15, msg=''):
     #seconds = random.randint(minimum, maximum)

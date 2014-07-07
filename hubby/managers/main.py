@@ -3,6 +3,7 @@ from datetime import datetime
 import transaction
 
 from hubby.util import legistar_id_guid, make_true_date
+from hubby.util import convert_range_to_datetime
 from hubby.database import Meeting, Item, Attachment, MeetingItem
 from hubby.database import Action, ItemAction, ActionVote
 from hubby.managers.base import BaseManager
@@ -85,7 +86,7 @@ class ActionManager(BaseManager):
     
 class MeetingManager(BaseManager):
     def query(self):
-        return self.session.query(Item)
+        return self.session.query(Meeting)
 
     def _add(self, mdata):
         pass
@@ -93,7 +94,19 @@ class MeetingManager(BaseManager):
     def add(self, mdata):
         pass
     
+    def _range_filter(self, query, start, end):
+        query = query.filter(Meeting.date >= start)
+        query = query.filter(Meeting.date <= end)
+        return query
+    
 
+    def get_ranged_meetings(self, start, end, timestamps=False):
+        if timestamps:
+            start, end = convert_range_to_datetime(start, end)
+        q = self.session.query(Meeting)
+        q = self._range_filter(q, start, end)
+        return q.all()
+    
     def _add_meeting_from_rss(self, entry):
         with transaction.manager:
             m = Meeting()
@@ -117,5 +130,4 @@ class MeetingManager(BaseManager):
             meeting.updated = datetime.now()
             m = self.session.merge(meeting)
         return m
-    
     

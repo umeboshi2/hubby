@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, date
+import time
 
 from sqlalchemy import Sequence, Column, ForeignKey
 
@@ -52,8 +53,9 @@ class SerialBase(object):
             except NotImplementedError:
                 print "NOTIMPLEMENTEDERROR", column.type
             value = getattr(self, name)
-            if pytype is datetime:
-                value = value.isoformat()
+            if pytype is datetime or pytype is date:
+                if value is not None:
+                    value = value.isoformat()
             data[name] = value
         return data
     

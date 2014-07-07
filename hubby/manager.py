@@ -7,6 +7,7 @@ from sqlalchemy import desc
 from hubby.legistar import legistar_host
 from hubby.util import legistar_id_guid
 from hubby.util import make_true_date
+from hubby.util import convert_range_to_datetime
 
 from hubby.database import Department, Person
 from hubby.database import Meeting, Item, MeetingItem
@@ -19,12 +20,6 @@ from hubby.collector.rss import RssCollector
 
 timeformat = '%I:%M %p'
 
-def convert_range_to_datetime(start, end):
-    "start and end are timestamps"
-    start = datetime.fromtimestamp(float(start))
-    end = datetime.fromtimestamp(float(end))
-    return start, end
-    
 
 def convert_agenda_number(agenda_number):
     delimiter = '.-'
