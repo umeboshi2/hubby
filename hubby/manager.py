@@ -183,6 +183,9 @@ class ModelManager(object):
             ##                    ####################
             ##                    ####################
             ##########################################
+            # first agenda item is missing from meeting details
+            if meeting.id == 302621:
+                agenda_num = '2'
             if agenda_num is not None:
                 dbitem.agenda_num = agenda_num
                 dbitem.type, dbitem.order = convert_agenda_number(agenda_num)
