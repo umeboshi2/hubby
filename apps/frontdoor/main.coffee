@@ -1,6 +1,6 @@
 # require config comes first
 require.config
-  baseUrl: 'frontdoor'
+  baseUrl: 'apps/frontdoor'
   paths:
     jquery: '/components/jquery/dist/jquery'
     #underscore: '/components/underscore-amd/underscore'
@@ -18,7 +18,7 @@ require.config
     ace: '/components/ace-builds/src/ace'
     marked: '/components/marked/lib/marked'
     
-    common: '/app/common'
+    common: '/apps/common'
 
     # FIXME: work with using bootstrap components
     bsModal: '/components/bootstrap/js/modal'

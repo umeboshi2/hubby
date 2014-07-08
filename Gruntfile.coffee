@@ -3,8 +3,7 @@
 module.exports = (grunt) ->
   # variables to use in config
   # foo = 'bar'
-  app_dir = 'trumpet/static'
-    
+
   # config
   grunt.initConfig
     coffee:
@@ -13,7 +12,6 @@ module.exports = (grunt) ->
           bare: false
         expand: true
         src: ['apps/**/*.coffee']
-        dest: app_dir
         ext: '.js'
                 
       compileWithMaps:
@@ -22,7 +20,6 @@ module.exports = (grunt) ->
           sourceMap: true
         expand: true
         src: ['apps/**/*.coffee']
-        dest: app_dir
         ext: '.js'
                 
     compass:
@@ -36,23 +33,11 @@ module.exports = (grunt) ->
       compass:
         files: ['sass/**/*.scss']
         tasks: ['compass']
-      cpcoffee:
-        files: ['apps/**/*.coffee']
-        tasks: ['copy:coffee']
-        
-    copy:
-      coffee:
-        files:
-          [
-            expand: true
-            src: ['apps/**']
-            dest: 'trumpet/static/'
-          ]  
-        
-        
     clean:
       js:
-        src: ['trumpet/static/apps/**/*.js']
+        src: ['apps/**/*.js']
+      jsmaps:
+        src: ['apps/**/*.js.map']
       emacs:
         src: ['**/*~']
         

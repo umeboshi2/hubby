@@ -86,8 +86,6 @@ define (require, exports, module) ->
             
       
   app = new Marionette.Application()
-  app.current_user = new common_models.CurrentUser
-  response = app.current_user.fetch()
 
   MSGBUS.reqres.setHandler 'current:user', ->
     app.current_user
@@ -98,9 +96,9 @@ define (require, exports, module) ->
   # for this).
   app.ready = false
 
-  response.done ->
-    prepare_app app
-    app.ready = true
+
+  prepare_app app
+  app.ready = true
     
     
                         
