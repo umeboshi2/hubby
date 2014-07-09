@@ -13,12 +13,8 @@ define (require, exports, module) ->
         url: '#'
       }
       {
-        name: 'Simple RSS'
-        url: '#simplerss'
-      }
-      {
-        name: 'Jellyfish'
-        url: '#jellyfish'
+        name: 'Hubby'
+        url: '#hubby'
       }
       ]
 
@@ -33,13 +29,6 @@ define (require, exports, module) ->
     #console.log $('#main-menu').addClass('action-button')
     
     
-    user = MSGBUS.reqres.request 'current:user'
-
-    usermenu = new Views.UserMenuView
-      model: user
-    MSGBUS.events.trigger 'user-menu:show', usermenu
-    
-
   initialize_page = () ->
     console.log 'initialize_page'
     layout = new Views.MainPageLayout
@@ -47,9 +36,6 @@ define (require, exports, module) ->
       view = new Views.MainPageView
       mainbar = new Views.MainBarView
       MSGBUS.events.trigger 'mainbar:show', mainbar
-
-      user = MSGBUS.reqres.request 'current:user'
-
     MSGBUS.events.trigger 'mainpage:show', layout
 
 

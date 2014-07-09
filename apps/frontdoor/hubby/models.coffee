@@ -5,14 +5,10 @@ define (require, exports, module) ->
   ########################################
   # Models
   ########################################
-  class PageModel extends Backbone.Model
-    validation:
-      name:
-        required: true
-      content:
-        required: true
-        
+  class SimpleMeetingModel extends Backbone.Model
+    
   module.exports =
-    PageModel: PageModel
+    SimpleMeetingModel: SimpleMeetingModel
+    
     
 

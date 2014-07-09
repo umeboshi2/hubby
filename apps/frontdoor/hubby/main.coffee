@@ -4,19 +4,19 @@ define (require, exports, module) ->
   Backbone = require 'backbone'
   MSGBUS = require 'msgbus'
 
-  Controller = require 'jellyfish/controller'
+  Controller = require 'hubby/controller'
   
 
   class Router extends Backbone.Marionette.AppRouter
     appRoutes:
-      'jellyfish': 'start'
-      'jellyfish/showpage/:id': 'show_page'
-      'jellyfish/editpage/:id': 'edit_page'
+      'hubby': 'start'
+      'hubby/showpage/:id': 'show_page'
+      'hubby/editpage/:id': 'edit_page'
       
       
       
-  MSGBUS.commands.setHandler 'jellyfish:route', () ->
-    console.log "jellyfish:route being handled"
+  MSGBUS.commands.setHandler 'hubby:route', () ->
+    console.log "hubby:route being handled"
     controller = new Controller
     router = new Router
       controller: controller

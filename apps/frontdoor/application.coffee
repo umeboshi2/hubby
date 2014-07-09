@@ -12,9 +12,7 @@ define (require, exports, module) ->
   require 'mainpage'
   
   require 'frontdoor/main'
-  require 'simplerss/main'
-  require 'jellyfish/main'
-  
+  require 'hubby/main'
 
   prepare_app = (app) ->
     app.addRegions
@@ -27,8 +25,6 @@ define (require, exports, module) ->
       footer: '#footer'
       
       main_menu: '#main-menu'
-      user_menu: '#user-menu'
-      
       
       sidebar: '.sidebar'
       rcontent: '.right-column-content'
@@ -45,9 +41,8 @@ define (require, exports, module) ->
 
       # then setup the routes
       MSGBUS.commands.execute 'frontdoor:route'
-      MSGBUS.commands.execute 'simplerss:route'
-      MSGBUS.commands.execute 'jellyfish:route'
-      
+      MSGBUS.commands.execute 'hubby:route'
+                                                
     # connect events
     MSGBUS.events.on 'mainpage:show', (view) =>
       #console.log 'mainpage:show called'
@@ -62,11 +57,6 @@ define (require, exports, module) ->
       #console.log 'main-menu:show called'
       app.main_menu.show view
       
-    MSGBUS.events.on 'user-menu:show', (view) =>
-      #console.log 'user-menu:show called'
-      app.user_menu.show view
-
-
     MSGBUS.events.on 'sidebar:show', (view) =>
       console.log 'sidebar:show called'
       app.sidebar.show view

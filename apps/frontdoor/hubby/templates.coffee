@@ -49,7 +49,14 @@ define (require, exports, module) ->
       text "    "
       a href:'#jellyfish/showpage/' + page.id, page.name
         
-      
+  meeting_list_entry = renderable (meeting) ->
+    div '.listview-list-entry', ->
+      text meeting.title
+
+  meeting_list = renderable () ->
+    div '.listview-header', 'Meetings'
+    div '.listview-list'
+          
   page_list = renderable () ->
     div '.listview-header', 'Wiki Pages'
     div '.listview-list'
@@ -79,5 +86,7 @@ define (require, exports, module) ->
     page_list: page_list
     page_view: page_view
     edit_page: edit_page
+    meeting_list_entry: meeting_list_entry
+    meeting_list: meeting_list
     
     

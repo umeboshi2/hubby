@@ -3,23 +3,21 @@ define (require, exports, module) ->
   MSGBUS = require 'msgbus'
   Marionette = require 'marionette'
 
-  Templates = require 'jellyfish/templates'
+  Templates = require 'hubby/templates'
 
-  Models = require 'jellyfish/models'
+  Models = require 'hubby/models'
   FormView = require 'common/form_view'
 
   require 'ace'
   
 
-  class JellyfishView extends Backbone.Marionette.ItemView
-
-  class PageListEntryView extends Backbone.Marionette.ItemView
-    template: Templates.page_list_entry
+  class SimpleMeetingView extends Backbone.Marionette.ItemView
+    template: Templates.meeting_list_entry
     
-  class PageListView extends Backbone.Marionette.CollectionView
-    template: Templates.page_list
-    itemView: PageListEntryView
-    
+  class MeetingListView extends Backbone.Marionette.CollectionView
+    template: Templates.meeting_list
+    itemView: SimpleMeetingView
+        
   class ShowPageView extends Backbone.Marionette.ItemView
     template: Templates.page_view
 
@@ -52,8 +50,8 @@ define (require, exports, module) ->
           
       
   module.exports =
-    JellyfishView: JellyfishView
-    PageListView: PageListView
     ShowPageView: ShowPageView
     EditPageView: EditPageView
+    SimpleMeetingView: SimpleMeetingView
+    MeetingListView: MeetingListView
     

@@ -3,7 +3,7 @@ define (require, exports, module) ->
   _ = require 'underscore'
   Backbone = require 'backbone'
 
-  Models = require 'jellyfish/models'
+  Models = require 'hubby/models'
   MSGBUS = require 'msgbus'
       
 
@@ -16,19 +16,19 @@ define (require, exports, module) ->
     parse: (response) ->
       return response.data
 
-  class PageCollection extends BaseCollection
-    model: Models.PageModel
-    url: '/rest/sitetext'
+  class MeetingCollection extends BaseCollection
+    model: Models.SimpleMeetingModel
+    url: 'http://paperboy:6543/rest/v0/main/meeting'
 
-  main_page_list = new PageCollection
-  MSGBUS.reqres.setHandler 'wiki:pagelist', ->
-    main_page_list
+  main_meeting_list = new MeetingCollection
+  MSGBUS.reqres.setHandler 'hubby:meetinglist', ->
+    main_meeting_list
 
-  MSGBUS.reqres.setHandler 'wiki:pagecontent', (page_id) ->
-    main_page_list.get page_id
+  MSGBUS.reqres.setHandler 'hubby:meetingdetails', (meeting_id) ->
+    main_meeting_list.get meeting_id
       
   module.exports =
-    PageCollection: PageCollection
+    MeetingCollection: MeetingCollection
 
     
     

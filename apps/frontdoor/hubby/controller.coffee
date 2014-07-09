@@ -4,21 +4,21 @@ define (require, exports, module) ->
   Marionette = require 'marionette'
   MSGBUS = require 'msgbus'
 
-  Views = require 'jellyfish/views'
-  Collections = require 'jellyfish/collections'
+  Views = require 'hubby/views'
+  Collections = require 'hubby/collections'
 
   
   class Controller extends Backbone.Marionette.Controller
     make_sidebar: ->
-      pages = MSGBUS.reqres.request 'wiki:pagelist'
+      meetings = MSGBUS.reqres.request 'hubby:meetinglist'
       
       MSGBUS.events.trigger 'sidebar:close'
-      view = new Views.PageListView
-        collection: pages
+      view = new Views.MeetingListView
+        collection: meetings
       MSGBUS.events.trigger 'sidebar:show', view
-      if pages.length == 0
+      if meetings.length == 0
         console.log 'fetching pages for sidebar'
-        pages.fetch()
+        meetings.fetch()
       
       
     set_header: (title) ->
@@ -26,10 +26,10 @@ define (require, exports, module) ->
       header.text title
       
     start: ->
-      console.log 'jellyfish start'
+      console.log 'hubby start'
       MSGBUS.events.trigger 'rcontent:close'
       MSGBUS.events.trigger 'sidebar:close'
-      @set_header 'JellyFish'
+      @set_header 'Hubby'
       @make_sidebar()
       
     show_page: (page_id) ->

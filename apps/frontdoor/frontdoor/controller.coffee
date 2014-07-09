@@ -14,12 +14,7 @@ define (require, exports, module) ->
       user = MSGBUS.reqres.request 'current:user'
       # FIXME
       show_login_form = false
-      if ! user.has('name')
-        view = new FDViews.LoginView
-        show_login_form = true
-        #view.render()
-      else
-        view = new FDViews.FrontDoorMainView
+      view = new FDViews.FrontDoorMainView
       MSGBUS.events.trigger 'rcontent:show', view
           
           
