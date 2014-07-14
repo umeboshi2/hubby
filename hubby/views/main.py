@@ -13,7 +13,8 @@ person_path = os.path.join(rscroot, 'person')
 meeting_path = os.path.join(rscroot, 'meeting')
 
 @resource(collection_path=meeting_path,
-          path=os.path.join(meeting_path, '{id}'))
+          path=os.path.join(meeting_path, '{id}'),
+          cors_origins=('*',))
 class MeetingResource(BaseManagementResource):
     mgrclass = MeetingManager
     def collection_get(self):
