@@ -10,6 +10,15 @@ screen:
   pkg:
     - latest
 
+screen-config:
+  file.managed:
+    - name: /home/vagrant/.screenrc
+    - source: salt://files/screenrc
+    - group: vagrant
+    - user: vagrant
+    - mode: 644
+    - require:
+      - pkg: screen
 
 virtualenv-basedir:
   file.directory:
