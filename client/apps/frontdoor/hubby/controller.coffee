@@ -7,6 +7,8 @@ define (require, exports, module) ->
   Views = require 'hubby/views'
   Collections = require 'hubby/collections'
 
+  fullCalendar = require 'fullcalendar'
+  #gcal = require 'fc_gcal'
   
   class Controller extends Backbone.Marionette.Controller
     make_sidebar: ->
@@ -16,9 +18,9 @@ define (require, exports, module) ->
       view = new Views.MeetingListView
         collection: meetings
       MSGBUS.events.trigger 'sidebar:show', view
-      if meetings.length == 0
-        console.log 'fetching pages for sidebar'
-        meetings.fetch()
+      #if meetings.length == 0
+      #  console.log 'fetching pages for sidebar'
+      #  meetings.fetch()
       
       
     set_header: (title) ->
@@ -30,7 +32,20 @@ define (require, exports, module) ->
       MSGBUS.events.trigger 'rcontent:close'
       MSGBUS.events.trigger 'sidebar:close'
       @set_header 'Hubby'
+      #@make_sidebar()
+      @show_calendar()
+      
+    show_calendar: () ->
+      console.log 'hubby show calendar'
       @make_sidebar()
+      view = new Views.MeetingCalendarView
+      MSGBUS.events.trigger 'rcontent:show', view
+      #MSGBUS.events.trigger 'maincalendar:display'
+      MSGBUS.commands.execute 'maincalendar:display'
+      
+    show_meeting: (meeting_id) ->
+      @make_sidebar()
+      meeting = MSGBUS.reqres.request 'hubby:getmeeting', meeting_id
       
     show_page: (page_id) ->
       @make_sidebar()

@@ -48,6 +48,10 @@ def generate_all_scss(basecolors):
     with file('sass/font-awesome.scss', 'w') as o:
         o.write('@import "partials/fontawesome/font-awesome";\n')
         
+    # prepare fullcalendar
+    with file('sass/fullcalendar.scss', 'w') as o:
+        o.write('@import "partials/fullcalendar";\n')
+        
             
 if __name__ == '__main__':
     generate_all_scss(BASECOLORS)

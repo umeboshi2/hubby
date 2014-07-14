@@ -56,7 +56,12 @@ define (require, exports, module) ->
   meeting_list = renderable () ->
     div '.listview-header', 'Meetings'
     div '.listview-list'
-          
+    
+  meeting_calendar = renderable () ->
+    div '.listview-header', 'Meetings'
+    div '#maincalendar'
+
+                  
   page_list = renderable () ->
     div '.listview-header', 'Wiki Pages'
     div '.listview-list'
@@ -88,5 +93,6 @@ define (require, exports, module) ->
     edit_page: edit_page
     meeting_list_entry: meeting_list_entry
     meeting_list: meeting_list
+    meeting_calendar: meeting_calendar
     
     

@@ -18,7 +18,7 @@ define (require, exports, module) ->
 
   class MeetingCollection extends BaseCollection
     model: Models.SimpleMeetingModel
-    url: 'http://paperboy:6543/rest/v0/main/meeting'
+    url: '/rest/v0/main/meeting'
 
   main_meeting_list = new MeetingCollection
   MSGBUS.reqres.setHandler 'hubby:meetinglist', ->

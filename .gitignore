@@ -40,7 +40,9 @@ nosetests.xml
 .#*
 
 # my development cruft
-demo.sqlite
+hubby.sqlite
+hubby.sqlite-journal
+data
 
 
 # vagrant

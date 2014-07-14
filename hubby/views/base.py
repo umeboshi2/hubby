@@ -1,3 +1,19 @@
+class BaseView(object):
+    def __init__(self, request):
+        self.request = request
+        self.response = None
+        self.data = {}
+    
+    def __call__(self):
+        if self.response is not None:
+            return self.response
+        else:
+            return self.data
+
+
+    def get_app_settings(self):
+        return self.request.registry.settings
+
 
 class _BaseResource(object):
     def __init__(self, request):

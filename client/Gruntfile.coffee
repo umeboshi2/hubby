@@ -58,7 +58,7 @@ module.exports = (grunt) ->
     
     grunt.registerTask 'default', [
       'shell:scss'
-      'shell:bower'
+      #'shell:bower'
       'coffee:compile'
       'compass:compile'
       ]

@@ -17,6 +17,10 @@ define (require, exports, module) ->
   class MeetingListView extends Backbone.Marionette.CollectionView
     template: Templates.meeting_list
     itemView: SimpleMeetingView
+
+  class MeetingCalendarView extends Backbone.Marionette.ItemView
+    template: Templates.meeting_calendar
+    
         
   class ShowPageView extends Backbone.Marionette.ItemView
     template: Templates.page_view
@@ -54,4 +58,5 @@ define (require, exports, module) ->
     EditPageView: EditPageView
     SimpleMeetingView: SimpleMeetingView
     MeetingListView: MeetingListView
+    MeetingCalendarView: MeetingCalendarView
     
