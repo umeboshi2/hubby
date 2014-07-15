@@ -1,4 +1,0 @@
-recursive-include trumpet/templates *.mako
-recursive-include trumpet/scaffolds/trumpet *
-recursive-include trumpet/static *
-

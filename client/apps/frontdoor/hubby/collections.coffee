@@ -25,8 +25,15 @@ define (require, exports, module) ->
     main_meeting_list
 
   MSGBUS.reqres.setHandler 'hubby:meetingdetails', (meeting_id) ->
-    main_meeting_list.get meeting_id
-      
+    console.log 'hubby:meetingdetails requested'
+    #window.main_meeting_list = main_meeting_list
+    #meeting = main_meeting_list.get meeting_id
+    meeting = new Models.MainMeetingModel
+      id: meeting_id
+      url: () ->
+        '/rest/v0/main/meeting/' + @id
+    #return meeting
+
   module.exports =
     MeetingCollection: MeetingCollection
 

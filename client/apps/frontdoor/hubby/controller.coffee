@@ -9,14 +9,36 @@ define (require, exports, module) ->
 
   fullCalendar = require 'fullcalendar'
   #gcal = require 'fc_gcal'
+
+  sidebar_model = new Backbone.Model
+    header: 'Sidebar'
+    entries: [
+      {
+        name: 'maincalendar'
+        label: 'Main Calendar'
+      }
+      {
+        name: 'adduser'
+        label: 'New User'
+      }
+      {
+        name: 'listgroups'
+        label: 'List Groups'
+      }
+      {
+        name: 'addgroup'
+        label: 'Add Group'
+      }
+    ]
+  
   
   class Controller extends Backbone.Marionette.Controller
     make_sidebar: ->
       meetings = MSGBUS.reqres.request 'hubby:meetinglist'
       
       MSGBUS.events.trigger 'sidebar:close'
-      view = new Views.MeetingListView
-        collection: meetings
+      view = new Views.SideBarView
+        model: sidebar_model
       MSGBUS.events.trigger 'sidebar:show', view
       #if meetings.length == 0
       #  console.log 'fetching pages for sidebar'
@@ -44,16 +66,16 @@ define (require, exports, module) ->
       MSGBUS.commands.execute 'maincalendar:display'
       
     show_meeting: (meeting_id) ->
+      console.log 'show_meeting called'
       @make_sidebar()
-      meeting = MSGBUS.reqres.request 'hubby:getmeeting', meeting_id
+      meeting = MSGBUS.reqres.request 'hubby:meetingdetails', meeting_id
+      response = meeting.fetch()
+      response.done =>
+        view = new Views.ShowMeetingView
+          model: meeting
+        MSGBUS.events.trigger 'rcontent:show', view
+      window.currentmeeting = meeting
       
-    show_page: (page_id) ->
-      @make_sidebar()
-      page = MSGBUS.reqres.request 'wiki:pagecontent', page_id
-      view = new Views.ShowPageView
-        model: page
-      MSGBUS.events.trigger 'rcontent:show', view
-
     edit_page: (page_id) ->
       @make_sidebar()
       page = MSGBUS.reqres.request 'wiki:pagecontent', page_id

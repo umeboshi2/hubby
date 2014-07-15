@@ -40,7 +40,7 @@ class MeetingResource(BaseManagementResource):
                 meeting_items.append(mi.serialize())
             mdata['meeting_items'] = meeting_items
         if len(m.items):
-            items = []
+            items = dict()
             for i in m.items:
                 idata = i.serialize()
                 if len(i.attachments):
@@ -53,10 +53,11 @@ class MeetingResource(BaseManagementResource):
                     for a in i.actions:
                         actions.append(a.serialize())
                     idata['actions'] = actions
-                items.append(idata)
+                items[i.id] = idata
             mdata['items'] = items
-        return dict(data=mdata, result='success')
-
+        #return dict(data=mdata, result='success')
+        return mdata
+    
 
 
 
