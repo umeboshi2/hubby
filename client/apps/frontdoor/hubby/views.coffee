@@ -7,7 +7,8 @@ define (require, exports, module) ->
 
   Models = require 'hubby/models'
   FormView = require 'common/form_view'
-
+  require 'jquery-ui'
+  
   #require 'ace'
 
   class SideBarView extends Backbone.Marionette.ItemView
@@ -52,7 +53,24 @@ define (require, exports, module) ->
 
   class ShowMeetingView extends Backbone.Marionette.ItemView
     template: Templates.show_meeting_view
-    
+
+    onDomRefresh: () ->
+      attachments = $ '.hubby-meeting-item-attachments'
+      attachments.hide()
+      attachments.draggable()
+      $('.hubby-meeting-item-info').click ->
+        $(this).next().toggle()
+      $('.hubby-meeting-item-attachment-marker').click ->
+        $(this).next().toggle()
+      $('.hubby-meeting-item-action-marker').click ->
+        if $(this).hasClass('itemaction-loaded')
+          $(this).next().toggle()
+        else
+          itemid = $(this).attr('id')
+          url = '/hubby/frag/itemactions/' + itemid
+          $(this).next().load(url)
+          $(this).addClass('itemaction-loaded')
+        
         
   class ShowPageView extends Backbone.Marionette.ItemView
     template: Templates.page_view

@@ -109,9 +109,11 @@ define (require, exports, module) ->
           div '.hubby-meeting-item-content', ->
             p '.hubby-meeting-item-text', item.title
             if item.attachments != undefined and item.attachments.length
-              for att in item.attachments
-                div ->
-                  a href:'#ggg', att.name
+              div '.hubby-meeting-item-attachment-marker', 'Attachments'
+              div '.hubby-meeting-item-attachments', ->
+                for att in item.attachments
+                  div ->
+                    a href:'#ggg', att.name
                   
           
   edit_page = renderable (page) ->
