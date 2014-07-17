@@ -44,15 +44,6 @@ define (require, exports, module) ->
         div '.btn.btn-default.' + entry.name, entry.label
         
     
-  page_list_entry = renderable (page) ->
-    div '.listview-list-entry', ->
-      span '.btn-default.btn-xs', ->
-        a href:'#jellyfish/editpage/' + page.id,
-        style:'color:black', ->
-          icon '.edit-page.fa.fa-pencil'
-      text "    "
-      a href:'#jellyfish/showpage/' + page.id, page.name
-        
   meeting_list_entry = renderable (meeting) ->
     div '.listview-list-entry', ->
       text meeting.title
@@ -63,29 +54,10 @@ define (require, exports, module) ->
     
   meeting_calendar = renderable () ->
     div '.listview-header', 'Meetings'
+    div '#loading', ->
+      h2 'Loading Meetings'
     div '#maincalendar'
 
-                  
-  page_list = renderable () ->
-    div '.listview-header', 'Wiki Pages'
-    div '.listview-list'
-
-  page_view = renderable (page) ->
-    div '.listview-header', ->
-      text page.name
-    div '.listview-list', ->
-      teacup.raw marked page.content
-
-  show_meeting_view_orig = renderable (meeting) ->
-    div '.listview-header', ->
-      text meeting.title
-    div '.listview-list', ->
-      for mitem in meeting.meeting_items
-        div '.listview-list-entry', mitem, ->
-          item = meeting.items[mitem.item_id]
-          div '.center-block', item.name
-          div item.title
-          
   show_meeting_view = renderable (meeting) ->
     div '.hubby-meeting-header', ->
       div '.hubby-meeting-header-agenda', ->
@@ -113,28 +85,15 @@ define (require, exports, module) ->
               div '.hubby-meeting-item-attachments', ->
                 for att in item.attachments
                   div ->
-                    a href:'#ggg', att.name
+                    a href:att.url, att.name
                   
           
-  edit_page = renderable (page) ->
-    div '.listview-header', ->
-      text "Editing " + page.name
-      div '#save-button.pull-left.btn.btn-default.btn-xs', ->
-        text 'save'
-    div '#editor'
-    
-
-  
   ##################################################################
   # ##########################
   ##################################################################    
           
   module.exports =
     sidebar: sidebar
-    page_list_entry: page_list_entry
-    page_list: page_list
-    page_view: page_view
-    edit_page: edit_page
     meeting_list_entry: meeting_list_entry
     meeting_list: meeting_list
     meeting_calendar: meeting_calendar

@@ -11,10 +11,10 @@ define (require, exports, module) ->
   class MainMeetingModel extends Backbone.Model
     url: () ->
       '/rest/v0/main/meeting/' + @id
-      
+    parse: (response) ->
+      response.data
           
   module.exports =
     SimpleMeetingModel: SimpleMeetingModel
     MainMeetingModel: MainMeetingModel
     
-

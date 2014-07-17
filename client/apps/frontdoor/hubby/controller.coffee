@@ -5,6 +5,8 @@ define (require, exports, module) ->
   MSGBUS = require 'msgbus'
 
   Views = require 'hubby/views'
+  Models = require 'hubby/models'
+  
   Collections = require 'hubby/collections'
 
   fullCalendar = require 'fullcalendar'
@@ -18,16 +20,8 @@ define (require, exports, module) ->
         label: 'Main Calendar'
       }
       {
-        name: 'adduser'
-        label: 'New User'
-      }
-      {
-        name: 'listgroups'
-        label: 'List Groups'
-      }
-      {
-        name: 'addgroup'
-        label: 'Add Group'
+        name: 'listmeetings'
+        label: 'List Meetings'
       }
     ]
   
@@ -50,31 +44,28 @@ define (require, exports, module) ->
       header.text title
       
     start: ->
-      console.log 'hubby start'
+      #console.log 'hubby start'
       MSGBUS.events.trigger 'rcontent:close'
       MSGBUS.events.trigger 'sidebar:close'
       @set_header 'Hubby'
-      #@make_sidebar()
       @show_calendar()
       
     show_calendar: () ->
-      console.log 'hubby show calendar'
+      #console.log 'hubby show calendar'
       @make_sidebar()
       view = new Views.MeetingCalendarView
       MSGBUS.events.trigger 'rcontent:show', view
-      #MSGBUS.events.trigger 'maincalendar:display'
-      MSGBUS.commands.execute 'maincalendar:display'
       
     show_meeting: (meeting_id) ->
-      console.log 'show_meeting called'
+      #console.log 'show_meeting called'
       @make_sidebar()
-      meeting = MSGBUS.reqres.request 'hubby:meetingdetails', meeting_id
+      meeting = new Models.MainMeetingModel
+        id: meeting_id
       response = meeting.fetch()
       response.done =>
         view = new Views.ShowMeetingView
           model: meeting
         MSGBUS.events.trigger 'rcontent:show', view
-      window.currentmeeting = meeting
       
     edit_page: (page_id) ->
       @make_sidebar()

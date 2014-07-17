@@ -9,15 +9,11 @@ define (require, exports, module) ->
   FormView = require 'common/form_view'
   require 'jquery-ui'
   
-  #require 'ace'
-
   class SideBarView extends Backbone.Marionette.ItemView
     template: Templates.sidebar
     events:
       'click .maincalendar': 'maincalendar_pressed'
-      'click .adduser': 'add_user_pressed'
-      'click .listgroups': 'list_groups_pressed'
-      'click .addgroup': 'add_group_pressed'
+      'click .listmeetings': 'list_meetings_pressed'
       
     _navigate: (url) ->
       r = new Backbone.Router
@@ -27,20 +23,31 @@ define (require, exports, module) ->
       console.log 'maincalendar_pressed called'
       @_navigate '#hubby'
       
-    add_user_pressed: () ->
-      console.log 'add_user called'
-      @_navigate '#useradmin/adduser'
+    list_meetings_pressed: () ->
+      console.log 'list_meetings_pressed called'
+      @_navigate '#hubby/listmeetings'
       
-    list_groups_pressed: () ->
-      console.log 'list_groups_pressed called'
-      @_navigate '#useradmin/listgroups'
 
-    add_group_pressed: () ->
-      console.log 'add_group_pressed called'
-      @_navigate '#useradmin/addgroup'
+  render_calendar_event = (calEvent, element) ->
+    calEvent.url = '#hubby/viewmeeting/' + calEvent.id
+    element.css
+      'font-size' : '0.9em'
 
+  calendar_view_render = (view, element) ->
+    MSGBUS.commands.execute 'hubby:maincalendar:set_date'
 
-
+  loading_calendar_events = (bool) ->
+    loading = $ '#loading'
+    header = $ '.fc-header'
+    if bool
+      loading.show()
+      header.hide()
+    else
+      loading.hide()
+      header.show()
+      
+      
+    
   class SimpleMeetingView extends Backbone.Marionette.ItemView
     template: Templates.meeting_list_entry
     
@@ -51,6 +58,33 @@ define (require, exports, module) ->
   class MeetingCalendarView extends Backbone.Marionette.ItemView
     template: Templates.meeting_calendar
 
+    onDomRefresh: () ->
+      # get the current calendar date that has been stored
+      # before creating the calendar
+      date  = MSGBUS.reqres.request 'hubby:maincalendar:get_date'
+      cal = $ '#maincalendar'
+      cal.fullCalendar
+        header:
+          left: 'month, today'
+          center: 'title'
+          right: 'prev, next'
+        theme: true
+        defaultView: 'month'
+        eventSources:
+          [
+            url: '/hubcal'
+          ]
+        eventRender: render_calendar_event
+        viewRender: calendar_view_render
+        loading: loading_calendar_events
+        eventClick: (event) ->
+          url = event.url
+          Backbone.history.navigate url, trigger: true
+      # if the current calendar date that has been set,
+      # go to that date
+      if date != undefined
+        cal.fullCalendar('gotoDate', date)
+        
   class ShowMeetingView extends Backbone.Marionette.ItemView
     template: Templates.show_meeting_view
 
