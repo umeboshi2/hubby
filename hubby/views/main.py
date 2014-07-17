@@ -2,7 +2,7 @@ import os
 from cornice.resource import resource, view
 
 from hubby.database import Department, Person
-from hubby.managers.main import MeetingManager
+from hubby.managers.main import MeetingManager, ActionManager
 from hubby.views.base import BaseManagementResource
 from hubby.views.base import BaseView
 
@@ -12,6 +12,7 @@ rscroot = os.path.join(APIROOT, 'main')
 dept_path = os.path.join(rscroot, 'department')
 person_path = os.path.join(rscroot, 'person')
 meeting_path = os.path.join(rscroot, 'meeting')
+action_path = os.path.join(rscroot, 'action')
 
 @resource(collection_path=meeting_path,
           path=os.path.join(meeting_path, '{id}'),
@@ -46,7 +47,9 @@ class MeetingResource(BaseManagementResource):
                 if len(i.attachments):
                     attachments = []
                     for a in i.attachments:
-                        attachments.append(a.serialize())
+                        atdata = a.serialize()
+                        atdata['url'] = a.get_link()
+                        attachments.append(atdata)
                     idata['attachments'] = attachments
                 if len(i.actions):
                     actions = []
@@ -55,15 +58,30 @@ class MeetingResource(BaseManagementResource):
                     idata['actions'] = actions
                 items[i.id] = idata
             mdata['items'] = items
-        #return dict(data=mdata, result='success')
-        return mdata
+        return dict(data=mdata, result='success')
+
+@resource(collection_path=action_path,
+          path=os.path.join(action_path, '{id}'),
+          cors_origins=('*',))
+class ActionResource(BaseManagementResource):
+    mgrclass = ActionManager
+    def collection_get(self):
+        return dict(data=[], result='notyet')
+
+    def get(self):
+        id = int(self.request.matchdict['id'])
+        a = self.mgr.get(id)
+        if a is None:
+            # FIXME
+            raise RuntimeError, '404'
+        adata = a.serialize()
+        return dict(data=adata, result='success')
+    
     
 
 
 
 # json view for calendar
-
-
 class MeetingCalendarViewer(BaseView):
     def __init__(self, request):
         super(MeetingCalendarViewer, self).__init__(request)
@@ -76,25 +94,17 @@ class MeetingCalendarViewer(BaseView):
         end = self.request.GET['end']
         return start, end
         
-        
+    # json responses should not be lists
+    # this method is for the fullcalendar
+    # widget.
     def get_ranged_meetings(self):
         start, end = self._get_start_end_from_request()
         meetings = self.mgr.get_ranged_meetings(start, end,
                                                 timestamps=True)
         mlist = list()
         for m in meetings:
-            #mdata = dict(id=m.id, title=m.title,
-            #             url='/hello/%d' % m.id)
-            #del mdata['url']
-            #mdata = dict(id=m.id, title=m.title)
             mdata = m.serialize()
             del mdata['rss']
-            home = self.request.route_url('home')
-            print "HOME", home
-            #mdata['url'] = m.id
-            #data['url'] = 'http://localhost:6543/#hubby/viewmeeting/%d' % m.id
-            #mdata['url'] = 'http://localhost:6543/foo'
-            
             mlist.append(mdata)
         self.response = mlist
         
