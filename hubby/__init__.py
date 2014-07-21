@@ -21,9 +21,13 @@ def main(global_config, **settings):
                           request_factory=request_factory,)
     config.include('cornice')
     config.include('pyramid_mako')
-    #config.add_static_view('static', 'client', cache_max_age=3600)
-    #config.add_static_view(settings['static_assets'], 'hubby:client')
-    config.add_static_view(name='client', path=settings['static_assets_path'])
+    serve_static_assets = False
+    if 'serve_static_assets' in settings and settings['serve_static_assets'].lower() == 'true':
+        serve_static_assets = True
+    if serve_static_assets:
+        print "Serving static assets from pyramid.", serve_static_assets
+        config.add_static_view(name='client',
+                               path=settings['static_assets_path'])
     config.add_route('home', '/')
     config.add_view('hubby.views.client.ClientView',
                     route_name='home',)
