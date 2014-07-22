@@ -106,5 +106,7 @@ class MeetingCalendarViewer(BaseView):
             mdata = m.serialize()
             del mdata['rss']
             mlist.append(mdata)
+        headers = [('Access-Control-Allow-Origin', '*')]
+        self.request.response.headerlist.extend(headers) 
         self.response = mlist
         
