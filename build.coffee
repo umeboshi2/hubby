@@ -25,7 +25,7 @@
     marked: '../../components/marked/lib/marked'
     
   name: 'main'
-  out: 'javascripts/umeboshi-built.js'
+  out: 'javascripts/hubby-built.js'
   include: ['requireLib']
   wrapShim: true
   optimize: 'uglify'
