@@ -2,13 +2,17 @@
 require.config
   baseUrl: 'javascripts/hubby'
   paths:
-    jquery: '../../../components/jquery/dist/jquery'
+    jquery: '../../components/jquery/dist/jquery'
     underscore: '../../../components/lodash/dist/lodash.compat'
     backbone: '../../../components/backbone/backbone'
-    marionette: '../../../components/marionette.bundle/index'
+    'backbone.babysitter': '../../components/backbone.babysitter/lib/backbone.babysitter'
+    'backbone.wreqr': '../../../components/backbone.wreqr/lib/backbone.wreqr'
+    marionette: 'components/marionette/lib/core/backbone.marionette'
     validation: '../../../components/backbone.validation/dist/backbone-validation-amd'
     bootstrap: '../../../components/bootstrap/dist/js/bootstrap'
-    'jquery-ui': '../../../components/jquery-ui/ui/jquery-ui'
+    moment: '../../../components/moment/moment'
+    fullcalendar: '../../../components/fullcalendar/dist/fullcalendar'
+    'jquery-ui': '../../../components/jquery-ui/jquery-ui'
     requirejs: '../../../components/requirejs/require'
     text: '../../../components/requirejs-text/text'
     teacup: '../../../components/teacup/lib/teacup'
@@ -34,6 +38,7 @@ require.config
 require [
   'application'
   'frontdoor/main'
+  'demoapp/main'
   ], (App) ->
   # debug
   window.app = App

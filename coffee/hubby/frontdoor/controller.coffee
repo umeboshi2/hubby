@@ -42,21 +42,11 @@ define (require, exports, module) ->
         view = new FDViews.FrontDoorMainView
           model: page
         MSGBUS.events.trigger 'rcontent:show', view
-        #$('html, body').animate {scrollTop: 0}, 'fast'
           
     start: ->
       console.log 'controller.start called'
       @make_main_content()
       console.log 'frontdoor started'
-
-    user_info: ->
-      page = MSGBUS.reqres.request 'pages:getpage', 'news'
-      response = page.fetch()
-      response.done =>
-        view = new FDViews.FrontDoorMainView
-          model: page
-        MSGBUS.events.trigger 'rcontent:show', view
-      
 
   module.exports = Controller
   

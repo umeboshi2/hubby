@@ -19,6 +19,7 @@
 # compass
 .sass-cache
 
-stylesheets/
 components/
+
+build.js
 

@@ -12,21 +12,17 @@ define (require, exports, module) ->
   
   require 'mainpage'
   require 'frontdoor/main'
-
+  require 'demoapp/main'
+  
   prepare_app = (app) ->
     app.addRegions
       mainview: 'body'
 
       navbar: '#main-navbar'
-      content: '#main-content'
       footer: '#footer'
       
       sidebar: '#sidebar'
-      rcontent: '#main-content'
-      
-    app.on 'initialize:after', ->
-      console.log "start event being handled"
-      Backbone.history.start() unless Backbone.history.started
+      content: '#main-content'
       
     app.on 'start', ->
       console.log "start event being handled"
@@ -41,6 +37,7 @@ define (require, exports, module) ->
 
       # then setup the routes
       MSGBUS.commands.execute 'frontdoor:route'
+      MSGBUS.commands.execute 'hubby:route'
       
     # connect events
     MSGBUS.events.on 'mainpage:show', (view) =>
@@ -67,26 +64,24 @@ define (require, exports, module) ->
       
     MSGBUS.events.on 'rcontent:show', (view) =>
       console.log 'rcontent:show called'
-      app.rcontent.show view
+      app.content.show view
       
     MSGBUS.events.on 'rcontent:close', () =>
-      app.rcontent.destroy()
+      console.log "rcontent:close called"
+      if app.content != undefined
+        console.log app.content
+        if app.content.currentView != undefined
+          console.log app.content.currentView
+          app.content.empty()
       
             
       
   app = new Marionette.Application()
-  app.current_user = new Models.User
-  response = app.current_user.fetch()
-
-
-  MSGBUS.reqres.setHandler 'current:user', ->
-    app.current_user
     
   app.ready = false
 
-  response.done ->
-    prepare_app app
-    app.ready = true
+  prepare_app app
+  app.ready = true
     
   
   module.exports = app

@@ -69,10 +69,8 @@ define (require, exports, module) ->
         ul '.nav.navbar-nav', ->
           li '.active', ->
             a href:'#', 'Home'
-          li '.dropdown', ->
-            a '.dropdown-toggle', href:'#', 'data-toggle':'dropdown', ->
-              text 'Main '
-              span '.caret'
+          li ->
+            a href:'#hubby', 'Demo'
         ul '.nav.navbar-nav.navbar-right', ->
               
 
@@ -87,23 +85,6 @@ define (require, exports, module) ->
     div '#footer'
     
 
-  main_header = renderable (user) ->
-    header ->
-      h1 ->
-        a href:'mailto:' + user.email, 'Hubby Project Page for ' + user.name
-      p ->
-        a href:'#', 'Hubby Website'
-      p '.view', ->
-        a href:'https://github.com/umeboshi2', ->
-          text 'View the Project on GitHub'
-          small 'umeboshi2'
-      ul ->
-        li '.single', ->
-          a href:'https://github.com/umeboshi2/umeboshi2.github.io', ->
-            #img src:user.avatar_url
-            text 'View On'
-            strong 'GitHub'
-            
   main_sidebar = renderable (model) ->
     div '.sidebar-menu', ->
       for entry in model.entries
@@ -115,7 +96,6 @@ define (require, exports, module) ->
     PageLayoutTemplate: PageLayoutTemplate
     BootstrapLayoutTemplate: BootstrapLayoutTemplate
     BootstrapNavBarTemplate: BootstrapNavBarTemplate
-    main_header: main_header
     main_sidebar: main_sidebar
     make_menu: make_menu
 
