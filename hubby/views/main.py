@@ -1,5 +1,6 @@
 import os
 from cornice.resource import resource, view
+from datetime import datetime
 
 from hubby.database import Department, Person
 from hubby.managers.main import MeetingManager, ActionManager
@@ -91,16 +92,22 @@ class MeetingCalendarViewer(BaseView):
         
     def _get_start_end_from_request(self):
         start = self.request.GET['start']
+        year, month, day = [int(p) for p in start.split('-')]
+        start = datetime(year, month, day)
         end = self.request.GET['end']
+        year, month, day = [int(p) for p in end.split('-')]
+        end = datetime(year, month, day)
         return start, end
         
     # json responses should not be lists
     # this method is for the fullcalendar
-    # widget.
+    # widget. Fullcalendar v2 uses yyyy-mm-dd
+    # for start and end parameters, rather than
+    # timestamps.
     def get_ranged_meetings(self):
         start, end = self._get_start_end_from_request()
         meetings = self.mgr.get_ranged_meetings(start, end,
-                                                timestamps=True)
+                                                timestamps=False)
         mlist = list()
         for m in meetings:
             mdata = m.serialize()
