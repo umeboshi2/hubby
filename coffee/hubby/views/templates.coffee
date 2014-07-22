@@ -56,32 +56,32 @@ define (require, exports, module) ->
     div '#footer'
 
   BootstrapNavBarTemplate = renderable (brand) ->
-    div '.navbar.navbar-default.navbar-fixed-top', role:'navigation', ->
-      div '.container', ->
-        div '.navbar-header', ->
-          button '.navbar-toggle', type:'button', 'data-toggle':'collapse',
-          'data-target':'.navbar-collapse', ->
-            span '.sr-only', 'Toggle Navigation'
-            span '.icon-bar'
-            span '.icon-bar'
-            span '.icon-bar'
-          a '.navbar-brand', href:brand.url, brand.name
-        div '.navbar-collapse.collapse', ->
-          ul '.nav.navbar-nav', ->
-            li '.active', ->
-              a href:'#', 'Home'
-            li '.dropdown', ->
-              a '.dropdown-toggle', href:'#', 'data-toggle':'dropdown', ->
-                text 'Main '
-                span '.caret'
-          ul '.nav.navbar-nav.navbar-right', ->
+    div '.container', ->
+      div '.navbar-header', ->
+        button '.navbar-toggle', type:'button', 'data-toggle':'collapse',
+        'data-target':'.navbar-collapse', ->
+          span '.sr-only', 'Toggle Navigation'
+          span '.icon-bar'
+          span '.icon-bar'
+          span '.icon-bar'
+        a '.navbar-brand', href:brand.url, brand.name
+      div '.navbar-collapse.collapse', ->
+        ul '.nav.navbar-nav', ->
+          li '.active', ->
+            a href:'#', 'Home'
+          li '.dropdown', ->
+            a '.dropdown-toggle', href:'#', 'data-toggle':'dropdown', ->
+              text 'Main '
+              span '.caret'
+        ul '.nav.navbar-nav.navbar-right', ->
               
 
   BootstrapLayoutTemplate = renderable () ->
-    div '#main-navbar'
+    div '#main-navbar.navbar.navbar-default.navbar-fixed-top',
+    role:'navigation'
     div '.container-fluid', ->
       div '.row', ->
-        div '#sidebar.col-sm-3'
+        div '#sidebar.col-sm-2'
         div '#main-content.col-sm-9'
         
     div '#footer'

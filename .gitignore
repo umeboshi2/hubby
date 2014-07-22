@@ -19,3 +19,6 @@
 # compass
 .sass-cache
 
+stylesheets/
+components/
+
