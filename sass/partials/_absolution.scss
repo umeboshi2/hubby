@@ -36,6 +36,8 @@
   @include absolution-tabs;
 }
 
+@import "partials/basecolors";
+
 // Default Radius
 $ui-border-radius: 5px;
 
@@ -74,10 +76,10 @@ $ui-icons-error: $ui-icons;
 $ui-content-border-color: #a9a9a9; 
 $ui-content-color: #333333;
 $ui-content-link-color: $ui-content-color;
-$ui-content-background-color: #fdfdfd;
+$ui-content-background-color: $background-color;
 // If the background is default, add a full background description: 
 // $ui-content-background: #ffffff url(...);
-$ui-content-background: linear-gradient($ui-content-background-color,#ececec);
+$ui-content-background: linear-gradient($ui-content-background-color,darken($primary-color, 15%));
 $ui-content-background-type: image;
 
 // header
@@ -95,30 +97,30 @@ $ui-titlebar-background-type: image;
 
 
 // state-default
-$ui-default-border-color: #a9a9a9;
-$ui-default-color: #333333;
-$ui-default-background-color: #fdfdfd;
+$ui-default-color: $text-color;
+$ui-default-background-color: lighten($background-color, 10%);
+$ui-default-border-color: darken($ui-default-border-color, 20%);
 $ui-default-background: linear-gradient($ui-default-background-color,#ececec);
 $ui-default-link-color: $ui-default-color;
 
 // state-hover
-$ui-hover-border-color: #2e63a5;
-$ui-hover-color: #ffffff;
-$ui-hover-background-color: #5e9ae2;
-$ui-hover-background: linear-gradient($ui-hover-background-color,#3570b8);
+$ui-hover-color: $text-color;
+$ui-hover-background-color: lighten($button-background-color, 10%);
+$ui-hover-border-color: lighten($ui-hover-border-color, 20%);
+$ui-hover-background: linear-gradient($ui-hover-background-color,darken($ui-hover-background-color, 10%));
 $ui-hover-link-color: $ui-hover-color;
 
 // state-active
-$ui-active-border-color: #2e63a5;
-$ui-active-color: #ffffff; 
-$ui-active-background-color: #3570b8;
-$ui-active-background: linear-gradient($ui-active-background-color,#5e9ae2);
+$ui-active-color: $text-color; 
+$ui-active-background-color: $button-background-color;
+$ui-active-border-color: lighten($ui-active-background-color, 20%);
+$ui-active-background: linear-gradient($ui-active-background-color, darken($ui-active-background-color, 10%));
 $ui-active-link-color: $ui-active-color;
 
 // state-highlight
-$ui-highlight-border-color: #8b9fc2;
-$ui-highlight-color: #363636;
-$ui-highlight-background-color: #7cc5e3;
+$ui-highlight-color: $text-color;
+$ui-highlight-background-color: $button-background-color;
+$ui-highlight-border-color: lighten($ui-highlight-background-color, 20%);
 $ui-highlight-background: $ui-highlight-background-color;
 $ui-highlight-background-type: default;
 $ui-highlight-link-color: $ui-highlight-color;

@@ -18,12 +18,12 @@ $basecolor4: darken($basecolor, 20%);
 
 @import "sassy-buttons";
 
-
+@import "partials/basecolors";
 
 .hubby-meeting-header {
     @include border-radius(0.5em);
-    background: $basecolor4;
-    color: $basecolor;
+    background: darken($background-color, 20%);
+    color: $text-color;
     text-align: center;
     font-size: 1.5em;
     position: relative;
@@ -31,9 +31,9 @@ $basecolor4: darken($basecolor, 20%);
 
 .hubby-meeting-item {
     @include border-radius(0.5em);
-    background: $basecolor2;
+    background: darken($background-color, 5%);
     border-style: solid;
-    border-color: $basecolor2;
+    border-color: darken($background-color, 10%);
     margin: 0.1em;
     position: relative;
 }
@@ -65,7 +65,7 @@ $basecolor4: darken($basecolor, 20%);
 .hubby-meeting-item-info {
     font-size: 0.9em;
     position: relative;
-    background: $basecolor3;
+    background: darken($background-color, 15%);
 }
 
 .hubby-meeting-item-agenda-num {
@@ -99,14 +99,17 @@ $basecolor4: darken($basecolor, 20%);
 }
 
 .hubby-meeting-item-attachment-marker {
-    @include sassy-button("simple");
+    @include sassy-button("simple", $border-radius-base, $font-size-base, $button-background-color);
+    //@include sassy-button("simple");
     font-size: 0.7em;
     font-weight: bold;
+    color: $text-color;
 }
 .hubby-meeting-item-action-marker {
-    @include sassy-button("simple");
+    @include sassy-button("simple", $border-radius-base, $font-size-base, $button-background-color);
     font-size: 0.7em;
     font-weight: bold;
+    color: $text-color;
 }
 
 
