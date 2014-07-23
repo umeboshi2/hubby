@@ -1,20 +1,13 @@
-# [GitHub Pages](#)
+# [Hubby](#)
 
 
-## Projects
+## Introduction
 
-Here is a list of projects:
+The hubby program scrapes information from [legistar](https://hattiesburg.legistar.com) and stores the information in a database.  This information can then be retrieved through a [REST](http://en.wikipedia.org/wiki/Representational_state_transfer) interface.
 
-- [paella](https://github.com/umeboshi2/paella)([website](paella))
+## Demo
 
-- [hubby](https://github.com/umeboshi2/hubby)([website](hubby))
-
-- [trumpet](https://github.com/umeboshi2/trumpet)
-
-
-## News
-
-Here is a page of [news](#pages/news)
+You can see a demo [here](#hubby)
 
 ## GitHub Pages
 
