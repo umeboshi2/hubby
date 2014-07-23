@@ -3,7 +3,7 @@ from cornice.resource import resource, view
 from datetime import datetime
 
 from hubby.database import Department, Person
-from hubby.managers.main import MeetingManager, ActionManager
+from hubby.managers.main import MeetingManager, ActionManager, ItemManager
 from hubby.views.base import BaseManagementResource
 from hubby.views.base import BaseView
 
@@ -13,6 +13,7 @@ rscroot = os.path.join(APIROOT, 'main')
 dept_path = os.path.join(rscroot, 'department')
 person_path = os.path.join(rscroot, 'person')
 meeting_path = os.path.join(rscroot, 'meeting')
+itemaction_path = os.path.join(rscroot, 'itemaction')
 action_path = os.path.join(rscroot, 'action')
 
 @resource(collection_path=meeting_path,
@@ -60,6 +61,27 @@ class MeetingResource(BaseManagementResource):
                 items[i.id] = idata
             mdata['items'] = items
         return dict(data=mdata, result='success')
+
+@resource(collection_path=itemaction_path,
+          path=os.path.join(itemaction_path, '{id}'),
+          cors_origins=('*',))
+class ItemActionResource(BaseManagementResource):
+    mgrclass = ItemManager
+    def collection_get(self):
+        return dict(data=[], result='notyet')
+
+    def get(self):
+        id = int(self.request.matchdict['id'])
+        item = self.mgr.get(id)
+        if item is None:
+            # FIXME
+            raise RuntimeError, '404'
+        actions = list()
+        for a in item.actions:
+            actions.append(a.serialize())
+        return dict(data=actions, result='success')
+    
+    
 
 @resource(collection_path=action_path,
           path=os.path.join(action_path, '{id}'),
