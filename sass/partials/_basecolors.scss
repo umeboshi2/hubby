@@ -2,14 +2,14 @@
 
 //$primary-color: lighten($color-salmon1, 50%);
 $primary-color: $color-WhiteSmoke;
-$secondary-color: $color-salmon1;
 
-$secondary-color: $color-salmon1;
+//$secondary-color: lighten($color-salmon1, 30%);
+$secondary-color: $color-salmon2;
 
 
 $background-color: darken($primary-color, 10%);
 $text-color: darken($color-brown3, 30%);
-$text-color: darken($color-RosyBrown, 30%);
+$text-color: darken($color-RosyBrown, 35%);
 
 $button-background-color: darken($background-color, 15%);
 
@@ -30,7 +30,7 @@ $brand-info:            #5bc0de;
 // Links
 // -------------------------
 
-$link-color:            darken($brand-primary, 35%);
+$link-color:            darken($secondary-color, 30%);
 $link-hover-color:      darken($link-color, 15%);
 
 // Typography
