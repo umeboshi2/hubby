@@ -96,12 +96,13 @@ define (require, exports, module) ->
       $('.hubby-meeting-item-attachment-marker').click ->
         $(this).next().toggle()
       $('.hubby-meeting-item-action-marker').click ->
+        action_area = $(this).next()
         if $(this).hasClass('itemaction-loaded')
-          $(this).next().toggle()
+          action_area.toggle()
         else
           itemid = $(this).attr('id')
-          url = '/hubby/frag/itemactions/' + itemid
-          $(this).next().load(url)
+          url = 'http://hubby.littledebian.org/rest/v0/main/itemaction/' + itemid
+          action_area.load(url)
           $(this).addClass('itemaction-loaded')
         
         

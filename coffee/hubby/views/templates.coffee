@@ -67,7 +67,7 @@ define (require, exports, module) ->
         a '.navbar-brand', href:brand.url, brand.name
       div '.navbar-collapse.collapse', ->
         ul '.nav.navbar-nav', ->
-          li '.active', ->
+          li ->
             a href:'#', 'Home'
           li ->
             a href:'#hubby', 'Demo'

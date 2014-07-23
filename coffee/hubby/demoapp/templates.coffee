@@ -86,7 +86,14 @@ define (require, exports, module) ->
                 for att in item.attachments
                   div ->
                     a href:att.url, att.name
-                  
+            if item.actions != undefined and item.actions.length
+              div '#' + item.id + '.hubby-meeting-item-action-marker', ->
+                text 'Actions'
+              div '.hubby-meeting-item-actions'
+
+
+                                                        
+              
           
   ##################################################################
   # ##########################
