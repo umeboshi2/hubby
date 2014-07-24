@@ -37,6 +37,7 @@ class MeetingResource(BaseManagementResource):
         mdata = m.serialize()
         # remove rss object
         del mdata['rss']
+        mdata['meeting_items'] = []
         if len(m.meeting_items):
             meeting_items = []
             for mi in m.meeting_items:
@@ -60,6 +61,9 @@ class MeetingResource(BaseManagementResource):
                     idata['actions'] = actions
                 items[i.id] = idata
             mdata['items'] = items
+        # extra stuff
+        mdata['dept'] = m.dept.name
+        mdata['prettydate'] = m.date.strftime("%A, %B %d, %Y")
         return dict(data=mdata, result='success')
 
 @resource(collection_path=itemaction_path,
