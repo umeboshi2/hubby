@@ -1,16 +1,36 @@
 @import "partials/X11colors";
 
 //$primary-color: lighten($color-salmon1, 50%);
-$primary-color: $color-WhiteSmoke;
+$primary-color: desaturate($color-cornsilk, 60%);
 
-//$secondary-color: lighten($color-salmon1, 30%);
+//good
+$primary-color: desaturate($color-bisque, 60%);
 $secondary-color: $color-salmon2;
+$text-color: darken($color-RosyBrown, 35%);
+
+// ok
+$primary-color: desaturate($color-MistyRose, 80%);
+$secondary-color: $color-salmon2;
+$text-color: darken($color-RosyBrown, 35%);
+
+// good
+$primary-color: desaturate($color-BlanchedAlmond, 80%);
+$secondary-color: $color-salmon2;
+$text-color: darken($color-RosyBrown, 35%);
+
+// good
+$primary-color: $color-LavenderBlush3;
+$secondary-color: $color-salmon3;
+$text-color: darken($color-RosyBrown, 35%);
+
+// good
+$primary-color: lighten(desaturate($color-DarkSeaGreen, 20%), 20%);
+$secondary-color: $color-salmon3;
+$text-color: darken($color-RosyBrown, 35%);
+
 
 
 $background-color: darken($primary-color, 10%);
-$text-color: darken($color-brown3, 30%);
-$text-color: darken($color-RosyBrown, 35%);
-
 $button-background-color: darken($background-color, 15%);
 
 /* for bootstrap */
@@ -30,7 +50,7 @@ $brand-info:            #5bc0de;
 // Links
 // -------------------------
 
-$link-color:            darken($secondary-color, 30%);
+$link-color:            darken($secondary-color, 10%);
 $link-hover-color:      darken($link-color, 15%);
 
 // Typography
@@ -72,7 +92,7 @@ $navbar-default-bg: darken($background-color, 10%);
 $navbar-default-border: darken($navbar-default-bg, 10%);
 
 // Navbar links
-$navbar-default-link-color:                $link-color;
+$navbar-default-link-color:                darken($link-color, 20%);
 $navbar-default-link-hover-color:          $link-hover-color;
 $navbar-default-link-hover-bg:             transparent;
 $navbar-default-link-active-color:         #555;
