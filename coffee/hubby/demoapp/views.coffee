@@ -61,10 +61,12 @@ define (require, exports, module) ->
       # get the current calendar date that has been stored
       # before creating the calendar
       date  = MSGBUS.reqres.request 'hubby:maincalendar:get_date'
+      navbar_color = MSGBUS.reqres.request 'hubby:navbar-color'
+      navbar_bg_color = MSGBUS.reqres.request 'hubby:navbar-bg-color'
       cal = $ '#maincalendar'
       cal.fullCalendar
         header:
-          left: 'month, today'
+          left: 'today'
           center: 'title'
           right: 'prev, next'
         theme: true
@@ -76,6 +78,8 @@ define (require, exports, module) ->
         eventRender: render_calendar_event
         viewRender: calendar_view_render
         loading: loading_calendar_events
+        eventColor: navbar_bg_color
+        eventTextColor: navbar_color
         eventClick: (event) ->
           url = event.url
           Backbone.history.navigate url, trigger: true

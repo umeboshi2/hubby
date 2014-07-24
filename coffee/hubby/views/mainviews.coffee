@@ -5,6 +5,16 @@ define (require, exports, module) ->
 
   Templates = require 'views/templates'
   
+  MSGBUS.reqres.setHandler 'hubby:navbar-color', ->
+    navbar = $ '#main-navbar'
+    navbar.css 'color'
+    
+  MSGBUS.reqres.setHandler 'hubby:navbar-bg-color', ->
+    navbar = $ '#main-navbar'
+    navbar.css 'background-color'
+    
+
+  MSGBUS.reqres.setHandler  
   class MainPageView extends Backbone.Marionette.ItemView
     template: Templates.PageLayoutTemplate
 
