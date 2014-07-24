@@ -13,7 +13,11 @@ define (require, exports, module) ->
       'http://hubby.littledebian.org/rest/v0/main/meeting/' + @id
     parse: (response) ->
       response.data
-          
+
+  class ItemActionModel extends Backbone.Model
+    url: () ->
+      'http://hubby.littledebian.org/rest/v0/main/itemaction/' + @id
+                
   module.exports =
     SimpleMeetingModel: SimpleMeetingModel
     MainMeetingModel: MainMeetingModel

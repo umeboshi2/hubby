@@ -46,7 +46,8 @@ define (require, exports, module) ->
     
   meeting_list_entry = renderable (meeting) ->
     div '.listview-list-entry', ->
-      text meeting.title
+      a href:'#hubby/viewmeeting/' + meeting.id, ->
+        text meeting.title
         
   meeting_list = renderable () ->
     div '.listview-header', 'Meetings'
@@ -60,13 +61,22 @@ define (require, exports, module) ->
 
   show_meeting_view = renderable (meeting) ->
     div '.hubby-meeting-header', ->
+      p ->
+        text 'Department: ' + meeting.dept
+      p ->
+        text 'Meeting for ' + meeting.prettydate
       div '.hubby-meeting-header-agenda', ->
         text 'Agenda: ' + meeting.agenda_status
       div '.hubby-meeting-header-minutes', ->
         text 'Minutes: ' + meeting.minutes_status
     div '.hubby-meeting-item-list', ->
       agenda_section = 'start'
-      for mitem in meeting.meeting_items
+      item_count = 0
+      meeting_items = meeting.meeting_items
+      if meeting_items == undefined
+        meeting_items = []
+      for mitem in meeting_items
+        item_count += 1
         item = meeting.items[mitem.item_id]
         #console.log agenda_section + '->' + mitem.type
         if mitem.type != agenda_section and mitem.type
@@ -75,7 +85,10 @@ define (require, exports, module) ->
           h3 '.hubby-meeting-agenda-header', section_header
         div '.hubby-meeting-item', ->
           div '.hubby-meeting-item-info', ->
-            div '.hubby-meeting-item-agenda-num', mitem.agenda_num
+            agenda_num = mitem.agenda_num
+            if agenda_num is null
+              agenda_num = item_count
+            div '.hubby-meeting-item-agenda-num', agenda_num
             div '.hubby-meeting-item-fileid', item.file_id
             div '.hubby-meeting-item-status', item.status
           div '.hubby-meeting-item-content', ->

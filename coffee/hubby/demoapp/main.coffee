@@ -10,6 +10,7 @@ define (require, exports, module) ->
     appRoutes:
       'hubby': 'start'
       'hubby/viewmeeting/:id': 'show_meeting'
+      'hubby/listmeetings': 'list_meetings'
       
   current_calendar_date = undefined
   MSGBUS.commands.setHandler 'hubby:maincalendar:set_date', () ->

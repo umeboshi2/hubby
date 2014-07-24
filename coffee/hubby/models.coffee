@@ -8,7 +8,10 @@ define (require, exports, module) ->
 
   class Page extends Backbone.Model
     url: () ->
-      '/hubby/pages/' + @id + '.json'
+      pathname = '/hubby/pages/'
+      if window.location.pathname == '/index.local.html'
+        pathname = '/pages/'
+      return pathname + @id + '.json'
 
   module.exports =
     Page: Page

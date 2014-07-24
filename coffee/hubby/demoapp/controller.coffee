@@ -24,7 +24,8 @@ define (require, exports, module) ->
         label: 'List Meetings'
       }
     ]
-  
+
+  meetings = MSGBUS.reqres.request 'hubby:meetinglist'
   
   class Controller extends Backbone.Marionette.Controller
     make_sidebar: ->
@@ -66,6 +67,15 @@ define (require, exports, module) ->
         view = new Views.ShowMeetingView
           model: meeting
         MSGBUS.events.trigger 'rcontent:show', view
+
+    list_meetings: () ->
+      console.log 'list_meetings called'
+      @make_sidebar()
+      view = new Views.MeetingListView
+        collection: meetings
+      if meetings.length == 0
+        meetings.fetch()
+      MSGBUS.events.trigger 'rcontent:show', view
       
     edit_page: (page_id) ->
       @make_sidebar()
