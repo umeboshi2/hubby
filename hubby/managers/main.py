@@ -100,7 +100,7 @@ class MeetingManager(BaseManager):
         return query
     
     def get_meeting_list(self):
-        query = self.session.query(Meeting).order_by(Meeting.id)
+        query = self.session.query(Meeting).order_by(Meeting.date)
         return query.all()
     
     def get_ranged_meetings(self, start, end, timestamps=False):
