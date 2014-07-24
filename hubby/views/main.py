@@ -22,7 +22,7 @@ action_path = os.path.join(rscroot, 'action')
 class MeetingResource(BaseManagementResource):
     mgrclass = MeetingManager
     def collection_get(self):
-        meetings = [m.serialize() for m in self.mgr.all()]
+        meetings = [m.serialize() for m in self.mgr.get_meeting_list()]
         for m in meetings:
             if 'rss' in m:
                 del m['rss']

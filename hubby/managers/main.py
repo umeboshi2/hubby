@@ -99,7 +99,10 @@ class MeetingManager(BaseManager):
         query = query.filter(Meeting.date <= end)
         return query
     
-
+    def get_meeting_list(self):
+        query = self.session.query(Meeting).order_by(Meeting.id)
+        return query.all()
+    
     def get_ranged_meetings(self, start, end, timestamps=False):
         if timestamps:
             start, end = convert_range_to_datetime(start, end)
