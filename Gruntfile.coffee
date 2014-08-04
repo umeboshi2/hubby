@@ -40,15 +40,11 @@ module.exports = (grunt) ->
         
     watch:
       coffee:
-        files: ['**/*.coffee']
-        tasks: ['coffee:compileWithMaps']
+        files: ['coffee/**/*.coffee']
+        tasks: ['coffee:compileWithMaps', 'copy:coffee']
       compass:
         files: ['sass/**/*.scss']
         tasks: ['compass']
-      cpcoffee:
-        files: ['**/*.coffee']
-        tasks: ['copy:coffee']
-        cwd: 'coffee'
       buildjs:
         files: 'build.coffee'
         tasks: ['coffee:compileBuildJS']
