@@ -24,6 +24,18 @@ define (require, exports, module) ->
   MSGBUS.reqres.setHandler 'hubby:meetinglist', ->
     main_meeting_list
 
+  class ItemActionCollection extends BaseCollection
+    model: Models.ItemActionModel
+
+  make_item_action_collection = (itemid) ->
+    url = 'http://hubby.littledebian.org/rest/v0/main/itemaction/' + itemid
+    c = new ItemActionCollection
+    c.url = url
+    return c
+    
+  MSGBUS.reqres.setHandler 'hubby:item_action_collection', (itemid) ->
+    make_item_action_collection itemid
+    
   module.exports =
     MeetingCollection: MeetingCollection
 

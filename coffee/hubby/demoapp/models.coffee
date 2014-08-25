@@ -15,10 +15,9 @@ define (require, exports, module) ->
       response.data
 
   class ItemActionModel extends Backbone.Model
-    url: () ->
-      'http://hubby.littledebian.org/rest/v0/main/itemaction/' + @id
-                
+
   module.exports =
     SimpleMeetingModel: SimpleMeetingModel
     MainMeetingModel: MainMeetingModel
+    ItemActionModel: ItemActionModel
     

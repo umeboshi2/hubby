@@ -34,6 +34,9 @@ define (require, exports, module) ->
             
   capitalize = (str) ->
     str.charAt(0).toUpperCase() + str.slice(1)
+
+  handle_newlines = renderable (str) ->
+   str.replace(/(?:\r\n|\r|\n)/g, '<br />')
     
   ########################################
   # Templates
@@ -43,6 +46,16 @@ define (require, exports, module) ->
       for entry in model.entries
         div '.btn.btn-default.' + entry.name, entry.label
         
+  short_action = renderable (action) ->
+    div '.hubby-short-action', ->
+      p 'Mover(fixme): ' + action.mover_id
+      p 'Seconder(fixme): ' + action.seconder_id
+      p '.hubby-action-text', ->
+        teacup.raw handle_newlines action.action_text
+      
+  action_list = renderable () ->
+    div '.listview-header', 'Actions'
+    div '.listview-list'
     
   meeting_list_entry = renderable (meeting) ->
     div '.listview-list-entry', ->
@@ -64,7 +77,7 @@ define (require, exports, module) ->
       p ->
         text 'Department: ' + meeting.dept
       p ->
-        text 'Meeting for ' + meeting.prettydate
+        text 'Meeting held ' + meeting.prettydate
       div '.hubby-meeting-header-agenda', ->
         text 'Agenda: ' + meeting.agenda_status
       div '.hubby-meeting-header-minutes', ->
@@ -102,7 +115,7 @@ define (require, exports, module) ->
             if item.actions != undefined and item.actions.length
               div '#' + item.id + '.hubby-meeting-item-action-marker', ->
                 text 'Actions'
-              div '.hubby-meeting-item-actions'
+              div '#hubby-meeting-item-actions-' + item.id
 
 
                                                         
@@ -114,6 +127,8 @@ define (require, exports, module) ->
           
   module.exports =
     sidebar: sidebar
+    short_action: short_action
+    action_list: action_list
     meeting_list_entry: meeting_list_entry
     meeting_list: meeting_list
     meeting_calendar: meeting_calendar

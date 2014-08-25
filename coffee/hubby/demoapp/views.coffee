@@ -26,7 +26,6 @@ define (require, exports, module) ->
       console.log 'list_meetings_pressed called'
       @_navigate '#hubby/listmeetings'
       
-
   render_calendar_event = (calEvent, element) ->
     calEvent.url = '#hubby/viewmeeting/' + calEvent.id
     element.css
@@ -51,7 +50,6 @@ define (require, exports, module) ->
     template: Templates.meeting_list_entry
     
   class MeetingListView extends Backbone.Marionette.CollectionView
-    template: Templates.meeting_list
     childView: SimpleMeetingView
 
   class MeetingCalendarView extends Backbone.Marionette.ItemView
@@ -100,14 +98,21 @@ define (require, exports, module) ->
       $('.hubby-meeting-item-attachment-marker').click ->
         $(this).next().toggle()
       $('.hubby-meeting-item-action-marker').click ->
-        action_area = $(this).next()
-        if $(this).hasClass('itemaction-loaded')
+        el = $(this)
+        action_area = el.next()
+        if el.hasClass('itemaction-loaded')
           action_area.toggle()
         else
-          itemid = $(this).attr('id')
-          url = 'http://hubby.littledebian.org/rest/v0/main/itemaction/' + itemid
-          action_area.load(url)
-          $(this).addClass('itemaction-loaded')
+          itemid = el.attr('id')
+          req = 'hubby:item_action_collection'
+          collection = MSGBUS.reqres.request req, itemid
+          response = collection.fetch()
+          response.done =>
+            html = ''
+            for model in collection.models
+              html += Templates.short_action model.attributes
+            action_area.html html
+            $(this).addClass('itemaction-loaded')
         
         
   class ShowPageView extends Backbone.Marionette.ItemView
