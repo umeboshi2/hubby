@@ -94,7 +94,7 @@ $basecolor4: darken($basecolor, 20%);
 }
 
 .hubby-meeting-item-text {
-    font-size: 0.8em;
+    font-size: 0.9em;
 }
 
 .hubby-meeting-item-attachment-marker {
@@ -113,7 +113,7 @@ $basecolor4: darken($basecolor, 20%);
 
 
 .hubby-action-text {
-    font-size: 0.6em;
+    font-size: 0.9em;
     @include border-radius;
     border-color: $basecolor4;
     border-style: solid;
