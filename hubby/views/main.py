@@ -123,13 +123,13 @@ class MeetingCalendarViewer(BaseView):
             year, month, day = [int(p) for p in start.split('-')]
             start = datetime(year, month, day)
         else:
-            start = datetime.fromtimestamp(start)
+            start = datetime.fromtimestamp(float(start))
         if not timestamps:
             end = self.request.GET['end']
             year, month, day = [int(p) for p in end.split('-')]
             end = datetime(year, month, day)
         else:
-            end = datetime.fromtimestamp(end)
+            end = datetime.fromtimestamp(float(end))
         return start, end
         
     # json responses should not be lists
