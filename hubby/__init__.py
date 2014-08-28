@@ -30,10 +30,15 @@ def main(global_config, **settings):
                                path=settings['static_assets_path'])
     config.add_route('home', '/')
     config.add_view('hubby.views.client.ClientView',
-                    route_name='home',)
+                    route_name='home',)  
     config.add_route('meeting_calendar', '/hubcal')
     config.add_view('hubby.views.main.MeetingCalendarViewer',
                     route_name='meeting_calendar',
+                    renderer='json',)
+    
+    config.add_route('meeting_calendar_ts', '/hubcal1')
+    config.add_view('hubby.views.main.MeetingCalendarViewer',
+                    route_name='meeting_calendar_ts',
                     renderer='json',)
     
     config.scan()

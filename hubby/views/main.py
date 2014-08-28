@@ -113,8 +113,9 @@ class MeetingCalendarViewer(BaseView):
     def __init__(self, request):
         super(MeetingCalendarViewer, self).__init__(request)
         self.mgr = MeetingManager(self.request.db)
-        self.get_ranged_meetings()
-        
+        route = self.request.matched_route.name
+        tsdict = dict(meeting_calendar=False, meeting_calendar_ts=True)
+        self.get_ranged_meetings(timestamps=tsdict[route])
         
     def _get_start_end_from_request(self):
         start = self.request.GET['start']
@@ -130,10 +131,10 @@ class MeetingCalendarViewer(BaseView):
     # widget. Fullcalendar v2 uses yyyy-mm-dd
     # for start and end parameters, rather than
     # timestamps.
-    def get_ranged_meetings(self):
+    def get_ranged_meetings(self, timestamps=False):
         start, end = self._get_start_end_from_request()
         meetings = self.mgr.get_ranged_meetings(start, end,
-                                                timestamps=False)
+                                                timestamps=timestamps)
         mlist = list()
         for m in meetings:
             mdata = m.serialize()
