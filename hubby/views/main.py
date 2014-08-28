@@ -117,13 +117,19 @@ class MeetingCalendarViewer(BaseView):
         tsdict = dict(meeting_calendar=False, meeting_calendar_ts=True)
         self.get_ranged_meetings(timestamps=tsdict[route])
         
-    def _get_start_end_from_request(self):
+    def _get_start_end_from_request(self, timestamps):
         start = self.request.GET['start']
-        year, month, day = [int(p) for p in start.split('-')]
-        start = datetime(year, month, day)
-        end = self.request.GET['end']
-        year, month, day = [int(p) for p in end.split('-')]
-        end = datetime(year, month, day)
+        if not timestamps:
+            year, month, day = [int(p) for p in start.split('-')]
+            start = datetime(year, month, day)
+        else:
+            start = datetime.fromtimestamp(start)
+        if not timestamps:
+            end = self.request.GET['end']
+            year, month, day = [int(p) for p in end.split('-')]
+            end = datetime(year, month, day)
+        else:
+            end = datetime.fromtimestamp(end)
         return start, end
         
     # json responses should not be lists
