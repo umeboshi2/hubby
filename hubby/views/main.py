@@ -124,13 +124,9 @@ class MeetingCalendarViewer(BaseView):
         if not timestamps:
             year, month, day = [int(p) for p in start.split('-')]
             start = datetime(year, month, day)
-        else:
-            start = datetime.fromtimestamp(int(start))
         if not timestamps:
             year, month, day = [int(p) for p in end.split('-')]
             end = datetime(year, month, day)
-        else:
-            end = datetime.fromtimestamp(int(end))
         return start, end
         
     # json responses should not be lists
