@@ -119,13 +119,13 @@ class MeetingCalendarViewer(BaseView):
         
     def _get_start_end_from_request(self, timestamps):
         start = self.request.GET['start']
+        end = self.request.GET['end']
         if not timestamps:
             year, month, day = [int(p) for p in start.split('-')]
             start = datetime(year, month, day)
         else:
             start = datetime.fromtimestamp(float(start))
         if not timestamps:
-            end = self.request.GET['end']
             year, month, day = [int(p) for p in end.split('-')]
             end = datetime(year, month, day)
         else:
