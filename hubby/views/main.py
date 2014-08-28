@@ -138,7 +138,7 @@ class MeetingCalendarViewer(BaseView):
     # for start and end parameters, rather than
     # timestamps.
     def get_ranged_meetings(self, timestamps=False):
-        start, end = self._get_start_end_from_request()
+        start, end = self._get_start_end_from_request(timestamps)
         meetings = self.mgr.get_ranged_meetings(start, end,
                                                 timestamps=timestamps)
         mlist = list()
