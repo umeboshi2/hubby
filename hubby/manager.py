@@ -32,6 +32,8 @@ def convert_agenda_number(agenda_number):
         order = int(order)
     else:
         itemtype = 'unknown'
+        while agenda_number.endswith('.'):
+            agenda_number = agenda_number[:-1]
         if agenda_number:
             order = int(agenda_number)
         else:
