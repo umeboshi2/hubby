@@ -28,6 +28,8 @@ def convert_agenda_number(agenda_number):
             break
     if delimiter in agenda_number:
         itemtype, order = agenda_number.split(delimiter)
+        if itemtype.startswith('+'):
+            itemtype = itemtype[1:]
         itemtype = AgendaItemTypeMap[itemtype]
         order = int(order)
     else:
