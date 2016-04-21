@@ -31,6 +31,9 @@ def convert_agenda_number(agenda_number):
         if itemtype.startswith('+'):
             itemtype = itemtype[1:]
         itemtype = AgendaItemTypeMap[itemtype]
+        order = order.strip()
+        while order.endswith('.'):
+            order = order[:-1]
         order = int(order)
     else:
         itemtype = 'unknown'
