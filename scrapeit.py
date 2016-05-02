@@ -114,6 +114,7 @@ for url, filename in ulist:
     
 # add all meetings
 for rss in rsslist:
+    print "Handle %s" % rss
     for entry in rss.entries:
         id, guid = legistar_id_guid(entry.link)
         meeting = s.query(Meeting).get(id)

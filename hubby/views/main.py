@@ -115,7 +115,8 @@ class MeetingCalendarViewer(BaseView):
         self.mgr = MeetingManager(self.request.db)
         route = self.request.matched_route.name
         tsdict = dict(meeting_calendar=False, meeting_calendar_ts=True)
-        self.get_ranged_meetings(timestamps=tsdict[route])
+        #self.get_ranged_meetings(timestamps=tsdict[route])
+        self.get_ranged_meetings(timestamps=True)
         
     def _get_start_end_from_request(self, timestamps):
         start = self.request.GET['start']

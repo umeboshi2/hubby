@@ -20,6 +20,24 @@ screen_template = """\
 @import "partials/page";
 """
 
+########################################
+jquery_ui2_template = """\
+@import "partials/jq-ui2-theme";
+@include jquery-ui2-base-theme;
+"""
+
+bootstrap2_template = """\
+@import "partials/bootstrap2-variables";
+@import "partials/bootstrap2-custom";
+@import "partials/bootstrap2-widgets";
+"""
+
+screen2_template = """\
+@import "partials/base2";
+@import "partials/misc2";
+@import "partials/page2";
+"""
+
 TEMPLATES = dict(jqueryui=jquery_ui_template,
                  bootstrap=bootstrap_template,
                  screen=screen_template)
