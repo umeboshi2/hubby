@@ -23,7 +23,7 @@ timeformat = '%I:%M %p'
 
 def convert_agenda_number(agenda_number):
     delimiter = '.-'
-    for delimiter in ['.-', '. - ', ' - ', '-']:
+    for delimiter in ['. -', '.-', '. - ', ' - ', '-']:
         if delimiter in agenda_number:
             break
     if delimiter in agenda_number:

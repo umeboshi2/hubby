@@ -102,7 +102,8 @@ y6 = RSS_YEAR_2016, 'data/y6.rss'
 
 m1 = RSS_THIS_MONTH, 'data/m1.rss'
 
-ulist = [y1, y2, y3, y4, y5, y6, m1]
+#ulist = [y1, y2, y3, y4, y5, y6, m1]
+ulist = [y1, y2, y3, y4, y5, y6]
 rsslist = []
 for url, filename in ulist:
     if os.path.exists(filename):

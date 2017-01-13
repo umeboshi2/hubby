@@ -116,12 +116,20 @@ class MeetingCalendarViewer(BaseView):
         route = self.request.matched_route.name
         tsdict = dict(meeting_calendar=False, meeting_calendar_ts=True)
         #self.get_ranged_meetings(timestamps=tsdict[route])
-        self.get_ranged_meetings(timestamps=True)
-        
-    def _get_start_end_from_request(self, timestamps):
+        start, end = self._bare_start_end()
+        timestamps = True
+        if '-' in start and '-' in end:
+            timestamps = False
+        self.get_ranged_meetings(timestamps=timestamps)
+
+    def _bare_start_end(self):
         start = self.request.GET['start']
         end = self.request.GET['end']
         print "START, END", start, end
+        return start, end
+    
+    def _get_start_end_from_request(self, timestamps):
+        start, end = self._bare_start_end()
         if not timestamps:
             year, month, day = [int(p) for p in start.split('-')]
             start = datetime(year, month, day)
