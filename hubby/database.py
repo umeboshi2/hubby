@@ -24,14 +24,14 @@ Base = declarative_base()
 
 
 FileType = Enum('agenda', 'minutes', 'attachment',
-                name='file_type_enum')
+                name='lgr_file_type_enum')
 
 AgendaItemType = Enum('presentation', 'policy', 'routine', 'unknown',
                       name='agenda_item_type_enum')
 
 VoteType = Enum('Yea', 'Nay', 'Abstain', 'Absent', 'Present',
                 'TEL-No Vote',
-                name='vote_type_enum')
+                name='lgr_vote_type_enum')
 
 AgendaItemTypeMap = dict(V='presentation', VI='policy',
                          VII='routine')
@@ -40,7 +40,7 @@ AgendaItemTypeMap = dict(V='presentation', VI='policy',
 CacheType = Enum('action', 'departments', 'item', 'meeting',
                  'people', 'rss-2011', 'rss-2012', 'rss-2013',
                  'rss-this-month',
-                 name='cache_type_enum')
+                 name='lgr_cache_type_enum')
 
 
 class SerialBase(object):
@@ -67,7 +67,7 @@ class SerialBase(object):
 ####################################
 
 class MainCache(Base, SerialBase):
-    __tablename__ = 'main_cache'
+    __tablename__ = 'lgr_main_cache'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(200), unique=True)
     retrieved = Column(DateTime)
@@ -77,7 +77,7 @@ class MainCache(Base, SerialBase):
 
 
 class Department(Base, SerialBase):
-    __tablename__ = 'departments'
+    __tablename__ = 'lgr_departments'
     id = Column(Integer, primary_key=True)
     guid = Column(String)
     name = Column(String)
@@ -92,7 +92,7 @@ class Department(Base, SerialBase):
 
 
 class Person(Base, SerialBase):
-    __tablename__ = 'people'
+    __tablename__ = 'lgr_people'
 
     id = Column(Integer, primary_key=True)
     guid = Column(String)
@@ -117,7 +117,7 @@ class Person(Base, SerialBase):
     
 
 class Meeting(Base, SerialBase):
-    __tablename__ = 'meetings'
+    __tablename__ = 'lgr_meetings'
 
     id = Column(Integer, primary_key=True)
     guid = Column(String)
@@ -125,7 +125,7 @@ class Meeting(Base, SerialBase):
     date = Column(Date)
     time = Column(String)
     link = Column(String)
-    dept_id = Column(Integer, ForeignKey('departments.id'))
+    dept_id = Column(Integer, ForeignKey('lgr_departments.id'))
     agenda_status = Column(String)
     minutes_status = Column(String)
     rss = Column(PickleType)
@@ -151,7 +151,7 @@ class Meeting(Base, SerialBase):
     
 
 class Item(Base, SerialBase):
-    __tablename__ = 'items'
+    __tablename__ = 'lgr_items'
 
     id = Column(Integer, primary_key=True)
     guid = Column(String)
@@ -187,13 +187,13 @@ class Item(Base, SerialBase):
     
 
 class MeetingItem(Base, SerialBase):
-    __tablename__ = 'meeting_item'
+    __tablename__ = 'lgr_meeting_item'
     
     meeting_id = Column('meeting_id', Integer,
-                        ForeignKey('meetings.id'),
+                        ForeignKey('lgr_meetings.id'),
                         primary_key=True)
     item_id = Column('item_id', Integer,
-                     ForeignKey('items.id'),
+                     ForeignKey('lgr_items.id'),
                      primary_key=True)
 
     agenda_num = Column(String)
@@ -222,14 +222,14 @@ class MeetingItem(Base, SerialBase):
     
     
 class Action(Base, SerialBase):
-    __tablename__ = 'actions'
+    __tablename__ = 'lgr_actions'
 
     id = Column(Integer, primary_key=True)
     guid = Column(String)
     file_id = Column(String)
     filetype = Column(String)
-    mover_id = Column(Integer, ForeignKey('people.id'))
-    seconder_id = Column(Integer, ForeignKey('people.id'))
+    mover_id = Column(Integer, ForeignKey('lgr_people.id'))
+    seconder_id = Column(Integer, ForeignKey('lgr_people.id'))
     result = Column(String)
     agenda_note = Column(String)
     minutes_note = Column(String)
@@ -257,13 +257,13 @@ class Action(Base, SerialBase):
     
 
 class ItemAction(Base, SerialBase):
-    __tablename__ = 'item_action'
+    __tablename__ = 'lgr_item_action'
 
     item_id = Column('item_id', Integer,
-                     ForeignKey('items.id'),
+                     ForeignKey('lgr_items.id'),
                      primary_key=True)
     action_id = Column('action_id', Integer,
-                        ForeignKey('actions.id'),
+                        ForeignKey('lgr_actions.id'),
                         primary_key=True)
 
     def __init__(self, item_id, action_id):
@@ -275,13 +275,13 @@ class ItemAction(Base, SerialBase):
     
 
 class ActionVote(Base, SerialBase):
-    __tablename__ = 'action_vote'
+    __tablename__ = 'lgr_action_vote'
 
     action_id = Column('action_id', Integer,
-                       ForeignKey('actions.id'),
+                       ForeignKey('lgr_actions.id'),
                        primary_key=True)
     person_id = Column('person_id', Integer,
-                       ForeignKey('people.id'),
+                       ForeignKey('lgr_people.id'),
                        primary_key=True)
     vote = Column('vote', VoteType)
 
@@ -296,7 +296,7 @@ class ActionVote(Base, SerialBase):
 
 
 class File(Base, SerialBase):
-    __tablename__ = 'files'
+    __tablename__ = 'lgr_files'
 
     id = Column(Integer,
                 primary_key=True)
@@ -315,9 +315,9 @@ class File(Base, SerialBase):
     
     
 class Agenda(Base, SerialBase):
-    __tablename__ = 'agendas'
+    __tablename__ = 'lgr_agendas'
 
-    id = Column(Integer, ForeignKey('meetings.id'),
+    id = Column(Integer, ForeignKey('lgr_meetings.id'),
                 primary_key=True)
     guid = Column(String)
     http_info = Column(PickleType)
@@ -336,9 +336,9 @@ class Agenda(Base, SerialBase):
     
     
 class Minutes(Base, SerialBase):
-    __tablename__ = 'minutes'
+    __tablename__ = 'lgr_minutes'
 
-    id = Column(Integer, ForeignKey('meetings.id'),
+    id = Column(Integer, ForeignKey('lgr_meetings.id'),
                 primary_key=True)
     guid = Column(String)
     http_info = Column(PickleType)
@@ -357,7 +357,7 @@ class Minutes(Base, SerialBase):
     
     
 class Attachment(Base, SerialBase):
-    __tablename__ = 'attachments'
+    __tablename__ = 'lgr_attachments'
 
     id = Column(Integer, primary_key=True)
     guid = Column(String)
@@ -365,7 +365,7 @@ class Attachment(Base, SerialBase):
     http_info = Column(PickleType)
     content = Column(LargeBinary)
     link = Column(String)
-    item_id = Column(Integer, ForeignKey('items.id'))
+    item_id = Column(Integer, ForeignKey('lgr_items.id'))
     
     def __init__(self):
         self.id = None
@@ -384,7 +384,7 @@ class Attachment(Base, SerialBase):
     
 
 class Tag(Base, SerialBase):
-    __tablename__ = 'tagnames'
+    __tablename__ = 'lgr_tagnames'
 
     name = Column(String, primary_key=True)
 
@@ -396,11 +396,11 @@ class Tag(Base, SerialBase):
     
 
 class ItemTag(Base, SerialBase):
-    __tablename__ = 'item_tags'
+    __tablename__ = 'lgr_item_tags'
 
-    id = Column(Integer, ForeignKey('items.id'),
+    id = Column(Integer, ForeignKey('lgr_items.id'),
                 primary_key=True)
-    tag = Column(String, ForeignKey('tagnames.name'),
+    tag = Column(String, ForeignKey('lgr_tagnames.name'),
                  primary_key=True)
 
     def __init__(self):
@@ -413,7 +413,7 @@ class ItemTag(Base, SerialBase):
 # ItemTag relationships
 Tag.items = relationship(Item, backref='tags',
                              order_by=Item.id,
-                             secondary='item_tags')
+                             secondary='lgr_item_tags')
 
     
 #######################################################
@@ -428,7 +428,7 @@ Meeting.dept = relationship(Department)
 
 
 Meeting.items = relationship(Item, backref='meetings',
-                             secondary='meeting_item')
+                             secondary='lgr_meeting_item')
 
 Meeting.meeting_items = relationship(MeetingItem,
                                      order_by=MeetingItem.item_order)
@@ -447,7 +447,7 @@ MeetingItem.item = relationship(Item)
 # Item relationships
 Item.actions =  relationship(Action, backref='items',
                              order_by=Action.id,
-                             secondary='item_action')
+                             secondary='lgr_item_action')
 
 Item.attachments = relationship(Attachment, backref='item',
                                 order_by=Attachment.id)
@@ -455,7 +455,7 @@ Item.attachments = relationship(Attachment, backref='item',
 
 # Action relationships
 Action.item = relationship(Item, backref='items',
-                           secondary='item_action')
+                           secondary='lgr_item_action')
 
 Action.mover = relationship(Person, primaryjoin='Action.mover_id == Person.id')
 Action.seconder = relationship(Person,
