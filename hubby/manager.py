@@ -23,12 +23,17 @@ timeformat = '%I:%M %p'
 
 def convert_agenda_number(agenda_number):
     delimiter = '.-'
-    for delimiter in ['.-', '. - ', ' - ', '-']:
+    for delimiter in ['. -', '.-', '. - ', ' - ', '-']:
         if delimiter in agenda_number:
             break
     if delimiter in agenda_number:
         itemtype, order = agenda_number.split(delimiter)
+        if itemtype.startswith('+'):
+            itemtype = itemtype[1:]
         itemtype = AgendaItemTypeMap[itemtype]
+        order = order.strip()
+        while order.endswith('.'):
+            order = order[:-1]
         order = int(order)
     else:
         itemtype = 'unknown'

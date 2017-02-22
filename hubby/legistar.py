@@ -23,12 +23,15 @@ RSS_YEAR_2014 = 'https://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=130407
 
 RSS_YEAR_2015 = 'https://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=1800408&GUID=4a65e270-dca1-487b-a50a-775a9e595ecd&Mode=2015&Title=City+of+Hattiesburg%2c+MS+-+Calendar+%282015%29'
 
+RSS_YEAR_2016 = 'https://hattiesburg.legistar.com/Feed.ashx?M=Calendar&ID=2857417&GUID=0f83b996-05bd-4342-be1c-fc0e267f8dcb&Mode=2016&Title=City+of+Hattiesburg%2c+MS+-+Calendar+%282016%29'
+
 RSS_YEARLY_FEEDS = {
     2011: RSS_YEAR_2011,
     2012: RSS_YEAR_2012,
     2013: RSS_YEAR_2013,
     2014: RSS_YEAR_2014,
     2015: RSS_YEAR_2015,
+    2016: RSS_YEAR_2016,
     }
 
     

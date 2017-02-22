@@ -26,12 +26,23 @@ if 'OPENSHIFT_POSTGRESQL_DB_HOST' in os.environ:
     dburl = "postgresql://%s:%s@%s:%s/leaflet"
     dburl = dburl % (dbuser, dbpass, dbhost, dbport)
 else:
-    #dburl = "postgresql://dbadmin@bard/leaflet"
-    dburl = "sqlite:///%(here)s/hubby.sqlite" % dict(here=os.getcwd())
+    runtimedir_varname = 'XDG_RUNTIME_DIR'
+    if 'TMPHUBBYDB' in os.environ and runtimedir_varname in os.environ:
+        runtimedir = os.environ[runtimedir_varname]
+        hubbydir = os.path.join(runtimedir, 'hubby')
+        if not os.path.isdir(hubbydir):
+            os.makedirs(hubbydir)
+        dburl = "sqlite:///%(hubbydir)s/hubby.sqlite"
+        dburl = dburl % dict(hubbydir=hubbydir)
+
+    else:
+        #dburl = "postgresql://dbadmin@bard/leaflet"
+        dburl = "sqlite:///%(here)s/hubby.sqlite" % dict(here=os.getcwd())
 
 
 here = os.getcwd()
-settings = {'sqlalchemy.url' : 'sqlite:///%s/hubby.sqlite' % here}
+#settings = {'sqlalchemy.url' : 'sqlite:///%s/hubby.sqlite' % here}
+print "dburl", dburl
 settings = {'sqlalchemy.url' : dburl}
 engine = engine_from_config(settings)
 Base.metadata.create_all(engine)
@@ -75,6 +86,9 @@ if not len(depts):
 
 from hubby.legistar import RSS_THIS_MONTH, RSS_YEAR_2011, RSS_YEAR_2012
 from hubby.legistar import RSS_YEAR_2013, RSS_YEAR_2014, RSS_YEAR_2015
+from hubby.legistar import RSS_YEAR_2016
+from hubby.legistar import RSS_YEARLY_FEEDS
+
 
 y1 = RSS_YEAR_2011, 'data/y1.rss'
 y2 = RSS_YEAR_2012, 'data/y2.rss'
@@ -84,10 +98,12 @@ y3 = RSS_YEAR_2013, 'data/y3.rss'
 y4 = RSS_YEAR_2014, 'data/y4.rss'
 
 y5 = RSS_YEAR_2015, 'data/y5.rss'
+y6 = RSS_YEAR_2016, 'data/y6.rss'
 
 m1 = RSS_THIS_MONTH, 'data/m1.rss'
 
-ulist = [y1, y2, y3, y4, y5, m1]
+#ulist = [y1, y2, y3, y4, y5, y6, m1]
+ulist = [y1, y2, y3, y4, y5, y6]
 rsslist = []
 for url, filename in ulist:
     if os.path.exists(filename):
@@ -99,6 +115,7 @@ for url, filename in ulist:
     
 # add all meetings
 for rss in rsslist:
+    print "Handle %s" % rss
     for entry in rss.entries:
         id, guid = legistar_id_guid(entry.link)
         meeting = s.query(Meeting).get(id)
