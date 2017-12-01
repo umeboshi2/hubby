@@ -7,17 +7,11 @@ requires = [
     'SQLAlchemy',
     'feedparser',      # only needed for rss collection
     'psycopg2',        # dbapi for postgresql
-    'mechanize',
+    'robobrowser',
     'beautifulsoup4',
     'transaction',     # I am not sure if I should use this or not
     'PyPDF2',           # processing of legistar pdf's
-    'pyramid',
-    'pyramid_tm',
-    'pyramid_debugtoolbar',
     'zope.sqlalchemy',
-    'pyramid-beaker',
-    'pyramid-mako',
-    'waitress',
     'requests',
     'cornice',
     ]
