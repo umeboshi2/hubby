@@ -69,7 +69,7 @@ class PickleCollector(object):
         filename = self._filename(type, id)
         dbname = self._dbname(type, id)
         if os.path.isfile(filename):
-            content = Pickle.load(file(filename))
+            content = Pickle.load(open(filename, 'rb'), encoding='utf8')
             now = datetime.now()
             mc = MainCache()
             mc.name = dbname
@@ -96,8 +96,8 @@ class PickleCollector(object):
                 print("Retrieving", link)
                 collector.set_url(link)
             collector.collect()
-            Pickle.dump(collector.result, file(filename, 'w'))
-        return Pickle.load(file(filename))
+            Pickle.dump(collector.result, open(filename, 'wb'))
+        return Pickle.load(open(filename, 'rb'), encoding='utf8')
 
 
 class _MainCollector(PeopleCollector, DeptCollector,
