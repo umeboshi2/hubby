@@ -105,7 +105,7 @@ class ModelManager(object):
 
     # link is relative from legistar prefix
     def _remote_legislation_item(self, link):
-        print "using link", link
+        print("using link", link)
         collector = self.collector()
         url = collector.url_prefix + link
         collector.set_url(url)
@@ -130,7 +130,7 @@ class ModelManager(object):
     # link is full url to meeting
     def remote_legislation_items(self, link):
         meeting_items = self.remote_meeting_items(link)
-        print "Meeting has %d items" % len(meeting_items)
+        print("Meeting has %d items" % len(meeting_items))
         leg_items = []
         for item in meeting_items:
             item_page = item['item_page']

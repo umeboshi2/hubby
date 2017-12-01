@@ -1,16 +1,16 @@
 import os
-import cPickle as Pickle
+import pickle as Pickle
 from datetime import datetime
 
 from hubby.util import legistar_id_guid
 
-from base import BaseCollector
+from .base import BaseCollector
 
-from people import PeopleCollector
-from departments import DeptCollector
-from meeting import MeetingCollector
-from item import ItemCollector
-from action import ActionCollector
+from .people import PeopleCollector
+from .departments import DeptCollector
+from .meeting import MeetingCollector
+from .item import ItemCollector
+from .action import ActionCollector
 
 
 class PickleCollector(object):
@@ -77,7 +77,7 @@ class PickleCollector(object):
             mc.updated = now
             mc.content = content
         else:
-            raise RuntimeError, "No file present %s" % filename
+            raise RuntimeError("No file present %s" % filename)
         return mc
     
         
@@ -87,13 +87,13 @@ class PickleCollector(object):
             id, guid = legistar_id_guid(link)
         filename = self._filename(type, id)
         if not os.path.isfile(filename):
-            print "Retrieving %s from legistar..." % filename
+            print("Retrieving %s from legistar..." % filename)
             collector = self._collector(type)
             if link is not None:
-                print 'link is', link, type
+                print('link is', link, type)
                 if not link.startswith('http'):
                     link = collector.url_prefix + link
-                print "Retrieving", link
+                print("Retrieving", link)
                 collector.set_url(link)
             collector.collect()
             Pickle.dump(collector.result, file(filename, 'w'))

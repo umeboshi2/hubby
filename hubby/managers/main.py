@@ -25,7 +25,7 @@ class ItemManager(BaseManager):
                 for name, link in itemdata['attachments']:
                     id, guid = legistar_id_guid(link)
                     if self.session.query(Attachment).get(id) is not None:
-                        raise RuntimeError, "Duplicate attachment %d" % id
+                        raise RuntimeError("Duplicate attachment %d" % id)
                     a = Attachment()
                     a.id = id
                     a.guid = guid

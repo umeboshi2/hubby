@@ -1,10 +1,10 @@
 import random
 import time
 import datetime
-import urlparse
-import urllib2
-import httplib
-from httplib import IncompleteRead
+import urllib.parse
+import urllib.request, urllib.error, urllib.parse
+import http.client
+from http.client import IncompleteRead
 
 from hubby.legistar import legistar_host
 
@@ -47,7 +47,7 @@ def random_wait(minimum=5, maximum=15, msg=''):
     if msg:
         template_data = dict(seconds=seconds)
         msg = msg % template_data
-        print msg
+        print(msg)
     time.sleep(seconds)
 
 
@@ -55,7 +55,7 @@ def parse_date_string(datestring):
     dlist = datestring.split('/')
     if len(dlist) != 3:
         raise InvalidDateFormat("Invalid date string: %s" % datestring)
-    dlist = map(int, dlist)
+    dlist = list(map(int, dlist))
     proper = dlist[2], dlist[0], dlist[1]
     return proper
 
@@ -66,7 +66,7 @@ def make_true_date(datestring):
 
 
 def parse_legistar_cgi_query(link):
-    uparse = urlparse.urlparse(link)
+    uparse = urllib.parse.urlparse(link)
     query = uparse.query
     item_split = query.split('&')
     items = [item.split('=') for item in item_split]
@@ -128,7 +128,7 @@ def handle_link(uri):
     filename_marker = 'filename='
     disposition_key = 'content-disposition'
     length_key = 'content-length'
-    f = urllib2.urlopen(uri)
+    f = urllib.request.urlopen(uri)
     info = f.info()
     data['info'] = info
     data['fileobj'] = f
@@ -151,13 +151,13 @@ def patch_http_response_read(func):
     def inner(*args):
         try:
             return func(*args)
-        except httplib.IncompleteRead, e:
+        except http.client.IncompleteRead as e:
             return e.partial
     return inner
-httplib.HTTPResponse.read = patch_http_response_read(httplib.HTTPResponse.read)
+http.client.HTTPResponse.read = patch_http_response_read(http.client.HTTPResponse.read)
 
 def get_rss_feed(url):
-    response = urllib2.urlopen(url)
+    response = urllib.request.urlopen(url)
     return response.read(), response.info()
 
 

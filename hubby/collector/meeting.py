@@ -3,7 +3,7 @@ import re
 from hubby.util import onclick_link
 from hubby.util import legistar_id_guid
 
-from base import BaseCollector
+from .base import BaseCollector
 
 SPANIDS = dict(agenda_status='_lblAgendaStatus',
                minutes_status='_lblMinutesStatus',
@@ -37,7 +37,7 @@ class MeetingCollector(BaseCollector):
             exp = re.compile('.+%s$' % SPANIDS[key])
             spans = page.find_all('span', id=exp)
             if len(spans) != 1:
-                print "No span for %s" % key
+                print("No span for %s" % key)
             info['spans'][key] = spans[0]
         for key in ANCHORIDS:
             exp = re.compile('.+%s$' % ANCHORIDS[key])
@@ -49,12 +49,12 @@ class MeetingCollector(BaseCollector):
 
     def _prepare_meeting_info(self, info):
         newinfo = {}
-        for key in info['anchors'].keys():
+        for key in list(info['anchors'].keys()):
             if 'href' in info['anchors'][key].attrs:
                 newinfo[key] = info['anchors'][key]['href']
             else:
                 newinfo[key] = None
-        for key in info['spans'].keys():
+        for key in list(info['spans'].keys()):
             newinfo[key] = info['spans'][key].text
         return newinfo
 

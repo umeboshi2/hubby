@@ -25,7 +25,7 @@ def main(global_config, **settings):
     if 'serve_static_assets' in settings and settings['serve_static_assets'].lower() == 'true':
         serve_static_assets = True
     if serve_static_assets:
-        print "Serving static assets from pyramid.", serve_static_assets
+        print("Serving static assets from pyramid.", serve_static_assets)
         config.add_static_view(name='client',
                                path=settings['static_assets_path'])
     config.add_route('home', '/')

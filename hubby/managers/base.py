@@ -12,7 +12,7 @@ class BaseManager(object):
         return query
 
     def query(self):
-        raise NotImplementedError, "Override me"
+        raise NotImplementedError("Override me")
     
     def get(self, id):
         return self.query().get(id)

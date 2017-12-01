@@ -2,7 +2,7 @@ import re
 
 from hubby.util import legistar_id_guid
 
-from base import BaseCollector
+from .base import BaseCollector
 
 
 class DeptCollector(BaseCollector):

@@ -33,7 +33,7 @@ class MeetingResource(BaseManagementResource):
         m = self.mgr.get(id)
         if m is None:
             # FIXME
-            raise RuntimeError, '404'
+            raise RuntimeError('404')
         mdata = m.serialize()
         # remove rss object
         del mdata['rss']
@@ -79,7 +79,7 @@ class ItemActionResource(BaseManagementResource):
         item = self.mgr.get(id)
         if item is None:
             # FIXME
-            raise RuntimeError, '404'
+            raise RuntimeError('404')
         actions = list()
         for a in item.actions:
             actions.append(a.serialize())
@@ -100,7 +100,7 @@ class ActionResource(BaseManagementResource):
         a = self.mgr.get(id)
         if a is None:
             # FIXME
-            raise RuntimeError, '404'
+            raise RuntimeError('404')
         adata = a.serialize()
         return dict(data=adata, result='success')
     
@@ -125,7 +125,7 @@ class MeetingCalendarViewer(BaseView):
     def _bare_start_end(self):
         start = self.request.GET['start']
         end = self.request.GET['end']
-        print "START, END", start, end
+        print("START, END", start, end)
         return start, end
     
     def _get_start_end_from_request(self, timestamps):

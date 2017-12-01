@@ -2,7 +2,7 @@ import re
 
 from hubby.util import legistar_id_guid
 
-from base import BaseCollector
+from .base import BaseCollector
 
 
 DATA_IDENTIFIERS = dict(
@@ -65,7 +65,7 @@ class PeopleCollector(BaseCollector):
 
     def _get_person(self, page):
         markers = DATA_IDENTIFIERS
-        item_keys = markers.keys()
+        item_keys = list(markers.keys())
         item = {}.fromkeys(item_keys)
         for key in item_keys:
             if key == 'photo_link':
@@ -86,7 +86,7 @@ class PeopleCollector(BaseCollector):
                 else:
                     raise RuntimeError("no tags found for %s" % key)
             if len(tags) > 1:
-                print "len(%s) == %d" % (key, len(tags))
+                print("len(%s) == %d" % (key, len(tags)))
             if key == 'photo_link':
                 if not no_pix:
                     tag = tags[0]
@@ -100,7 +100,7 @@ class PeopleCollector(BaseCollector):
                 item[key] = tag.text.strip()
                 continue
             item[key] = tag.text.strip()
-            print key, item[key]
+            print(key, item[key])
         item['id'], item['guid'] = legistar_id_guid(self.url)
         return item
     

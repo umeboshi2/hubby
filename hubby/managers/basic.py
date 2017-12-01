@@ -23,7 +23,7 @@ class PersonManager(BaseManager):
 
     def _notrans_add(self, data):
         p = Person()
-        for key, value in data.items():
+        for key, value in list(data.items()):
             setattr(p, key, value)
         self.session.add(p)
         return p

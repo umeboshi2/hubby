@@ -5,7 +5,7 @@ from hubby.util import make_true_date
 from hubby.util import legistar_id_guid
 
 
-from base import BaseCollector
+from .base import BaseCollector
 
 ITEM_DATA_IDENTIFIERS = dict(file_id='_lblFile2',
                         name='_lblName2',
@@ -23,7 +23,7 @@ ITEM_DATA_IDENTIFIERS = dict(file_id='_lblFile2',
 class ItemCollector(BaseCollector):
     def _get_item(self, page):
         markers = ITEM_DATA_IDENTIFIERS
-        item_keys = markers.keys()
+        item_keys = list(markers.keys())
         item = {}.fromkeys(item_keys)
         item['action_details'] = []
         for key in item_keys:
@@ -35,7 +35,7 @@ class ItemCollector(BaseCollector):
             if not tags and key == 'action_details':
                 continue
             if len(tags) > 1:
-                print "len(%s) == %d" % (key, len(tags))
+                print("len(%s) == %d" % (key, len(tags)))
             if key == 'action_details':
                 for a in tags:
                     if 'onclick' in a.attrs:
@@ -67,7 +67,7 @@ class ItemCollector(BaseCollector):
             item['bad_url'] = url
             self.item = item
             self.result = self.item
-            print "Invalid parameters found", self.result
+            print("Invalid parameters found", self.result)
             return
         self.item = self._get_item(self.soup)
         for key in ['passed', 'introduced', 'on_agenda']:

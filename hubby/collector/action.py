@@ -2,7 +2,7 @@ import re
 
 from hubby.util import legistar_id_guid
 
-from base import BaseCollector
+from .base import BaseCollector
 
 ACTION_DATA_IDENTIFIERS = dict(file_id='_hypFile',
                         ftype='_lblType',
@@ -37,7 +37,7 @@ class ActionCollector(BaseCollector):
             
     def _get_action(self, page):
         markers = ACTION_DATA_IDENTIFIERS
-        item_keys = markers.keys()
+        item_keys = list(markers.keys())
         item = {}.fromkeys(item_keys)
         item['roll_call'] = False
         found_tags = False
@@ -47,11 +47,11 @@ class ActionCollector(BaseCollector):
             if not tags:
                 tags = page.find_all('a', id=exp)
             if not tags:
-                print "NO TAGS FOR", key
+                print("NO TAGS FOR", key)
                 continue
             found_tags = True
             if len(tags) > 1:
-                print "len(%s) == %d" % (key, len(tags))
+                print("len(%s) == %d" % (key, len(tags)))
             tag = tags[0]
             if markers[key].startswith('_lbl'):
                 # just text with lbl

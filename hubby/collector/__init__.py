@@ -1,1 +1,1 @@
-from main import MainCollector
+from .main import MainCollector
