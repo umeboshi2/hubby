@@ -1,10 +1,10 @@
-import mechanize
+import robobrowser
 from bs4 import BeautifulSoup
 
 
 class BaseCollector(object):
     def __init__(self):
-        self.browser = mechanize.Browser()
+        self.browser = robobrowser.RoboBrowser(parser='lxml')
         self.url = None
         self.response = None
         self.pageinfo = None
@@ -20,9 +20,9 @@ class BaseCollector(object):
         if url is None:
             raise RuntimeError("No url set.")
         self.response = self.browser.open(url)
-        self.info = self.response.info()
-        self.content = self.response.read()
-        self.soup = BeautifulSoup(self.content)
+        self.info = self.browser.response.headers
+        self.content = self.browser.response.content
+        self.soup = self.browser.parsed
 
     def set_url(self, url):
         self.url = url
