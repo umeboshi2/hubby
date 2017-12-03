@@ -26,7 +26,7 @@ class MeetingResource(BaseManagementResource):
         for m in meetings:
             if 'rss' in m:
                 del m['rss']
-        return dict(data=meetings, result='success')
+        return dict(data=meetings, total_count=len(meetings), result='success')
     
     def get(self):
         id = int(self.request.matchdict['id'])
@@ -112,7 +112,7 @@ class ActionResource(BaseManagementResource):
 class MeetingCalendarViewer(BaseView):
     def __init__(self, request):
         super(MeetingCalendarViewer, self).__init__(request)
-        self.mgr = MeetingManager(self.request.db)
+        self.mgr = MeetingManager(self.request.dbsession)
         route = self.request.matched_route.name
         tsdict = dict(meeting_calendar=False, meeting_calendar_ts=True)
         #self.get_ranged_meetings(timestamps=tsdict[route])
