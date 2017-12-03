@@ -66,6 +66,8 @@ def make_true_date(datestring):
 
 
 def parse_legistar_cgi_query(link):
+    if type(link) is bytes:
+        link = link.decode()
     uparse = urllib.parse.urlparse(link)
     query = uparse.query
     item_split = query.split('&')
@@ -75,6 +77,8 @@ def parse_legistar_cgi_query(link):
 
 
 def legistar_id_guid(link):
+    if type(link) is bytes:
+        link = link.decode()
     plink = parse_legistar_cgi_query(link)
     id = int(plink['ID'])
     guid = plink['GUID']
