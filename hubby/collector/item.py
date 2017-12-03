@@ -61,7 +61,7 @@ class ItemCollector(BaseCollector):
     
     def collect(self):
         self.retrieve_page(self.url)
-        if 'Invalid parameters!' in self.content:
+        if b'Invalid parameters!' in self.content:
             item = dict()
             item['action_details'] = []
             item['bad_url'] = url

@@ -69,7 +69,7 @@ class PickleCollector(object):
         filename = self._filename(type, id)
         dbname = self._dbname(type, id)
         if os.path.isfile(filename):
-            content = Pickle.load(open(filename, 'rb'), encoding='utf8')
+            content = Pickle.load(open(filename, 'rb'), encoding='utf-8')
             now = datetime.now()
             mc = MainCache()
             mc.name = dbname
@@ -97,7 +97,11 @@ class PickleCollector(object):
                 collector.set_url(link)
             collector.collect()
             Pickle.dump(collector.result, open(filename, 'wb'))
-        return Pickle.load(open(filename, 'rb'), encoding='utf8')
+        try:    
+            data = Pickle.load(open(filename, 'rb'))
+        except UnicodeDecodeError:
+            data = Pickle.load(open(filename, 'rb'), encoding='bytes')
+        return data
 
 
 class _MainCollector(PeopleCollector, DeptCollector,
