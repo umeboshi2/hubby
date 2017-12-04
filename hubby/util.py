@@ -99,7 +99,7 @@ def _view_url(id, guid, type):
     """Returns the url for for the agenda(A)/minutes(M) from a meeting identified
     by id, guid"""
     host = legistar_host
-    url_template = 'http://%s/View.ashx?M=%s&ID=%d&GUID=%s'
+    url_template = 'https://%s/View.ashx?M=%s&ID=%d&GUID=%s'
     url = url_template % (host, type, id, guid)
     return url
 

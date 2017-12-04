@@ -8,7 +8,7 @@ from .base import BaseCollector
 class DeptCollector(BaseCollector):
     def __init__(self):
         BaseCollector.__init__(self)
-        url = 'http://hattiesburg.legistar.com/Departments.aspx'
+        url = 'https://hattiesburg.legistar.com/Departments.aspx'
         self.set_url(url)
 
     def _get_depts(self, page):

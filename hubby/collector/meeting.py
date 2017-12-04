@@ -109,7 +109,7 @@ class MeetingCollector(BaseCollector):
 
 
 if __name__ == "__main__":
-    url = 'http://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
+    url = 'https://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
     mc = MeetingCollector()
     mc.set_url(url)
     mc.collect()

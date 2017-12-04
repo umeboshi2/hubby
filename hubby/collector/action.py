@@ -77,8 +77,8 @@ class ActionCollector(BaseCollector):
         
                 
 if __name__ == "__main__":
-    url = 'http://hattiesburg.legistar.com/HistoryDetail.aspx?ID=6153632&GUID=1376DD13-58E1-443A-9A2E-F218CE70C4B6'
-    url = 'http://hattiesburg.legistar.com/HistoryDetail.aspx?ID=5821489&GUID=3BF5DB0B-A3A7-4F90-BC9A-8670088BECA7'
+    url = 'https://hattiesburg.legistar.com/HistoryDetail.aspx?ID=6153632&GUID=1376DD13-58E1-443A-9A2E-F218CE70C4B6'
+    url = 'https://hattiesburg.legistar.com/HistoryDetail.aspx?ID=5821489&GUID=3BF5DB0B-A3A7-4F90-BC9A-8670088BECA7'
     ac = ActionCollector()
     ac.retrieve_page(url)
     i = ac._get_action(ac.soup)

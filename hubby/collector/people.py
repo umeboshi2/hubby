@@ -27,8 +27,8 @@ dware_link = 'PersonDetail.aspx?ID=83530&GUID=62048E45-5276-44A8-8413-19B46071AA
 class PeopleCollector(BaseCollector):
     def __init__(self):
         BaseCollector.__init__(self)
-        self.people_url = 'http://hattiesburg.legistar.com/People.aspx'
-        self.url_prefix = 'http://hattiesburg.legistar.com/'
+        self.people_url = 'https://hattiesburg.legistar.com/People.aspx'
+        self.url_prefix = 'https://hattiesburg.legistar.com/'
         
     def _get_people_anchors(self):
         self.set_url(self.people_url)

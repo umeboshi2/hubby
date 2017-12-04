@@ -380,7 +380,7 @@ class Attachment(Base, SerialBase):
         return "<Attachment:  id: %d>" % self.id
 
     def get_link(self):
-        return 'http://%s/%s' % (legistar_host, self.link)
+        return 'https://%s/%s' % (legistar_host, self.link)
     
 
 class Tag(Base, SerialBase):

@@ -10,7 +10,7 @@ class BaseCollector(object):
         self.pageinfo = None
         self.content = ''
         self.soup = None
-        self.url_prefix = 'http://hattiesburg.legistar.com/'
+        self.url_prefix = 'https://hattiesburg.legistar.com/'
 
     def retrieve_page(self, url=None):
         if url is None:
@@ -36,4 +36,4 @@ class BaseCollector(object):
 
 
 if __name__ == "__main__":
-    url = 'http://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
+    url = 'https://hattiesburg.legistar.com/MeetingDetail.aspx?From=RSS&ID=209045&GUID=6F113835-7E47-432D-B3BA-2140AC586A6C'
