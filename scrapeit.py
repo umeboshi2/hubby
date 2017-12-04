@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os, sys
-import cPickle as Pickle
+import pickle as Pickle
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import and_, or_
@@ -38,11 +38,12 @@ else:
     else:
         #dburl = "postgresql://dbadmin@bard/leaflet"
         dburl = "sqlite:///%(here)s/hubby.sqlite" % dict(here=os.getcwd())
+        dburl = "postgresql://dbadmin@localhost/hubby2016"
 
 
 here = os.getcwd()
 #settings = {'sqlalchemy.url' : 'sqlite:///%s/hubby.sqlite' % here}
-print "dburl", dburl
+print("dburl", dburl)
 settings = {'sqlalchemy.url' : dburl}
 engine = engine_from_config(settings)
 Base.metadata.create_all(engine)
@@ -57,14 +58,16 @@ if not os.path.isdir(pc.dir):
     
 def check_dupe_item(item):
     Dupe = True
+    # FIXME straighten this out
     if 'id' not in item:
-        print "Bad item", item
+        print("Bad item", item)
+        import pdb ; pdb.set_trace()
         return Dupe
     dbitem = s.query(Item).get(item['id'])
     if dbitem is None:
         return False
     filtered_keys = ['attachments', 'action_details']
-    keys = [k for k in item.keys() if k not in filtered_keys]
+    keys = [k for k in list(item.keys()) if k not in filtered_keys]
     for key in keys:
         if getattr(dbitem, key) != item[key]:
             Dupe = False
@@ -72,14 +75,14 @@ def check_dupe_item(item):
 
 people = s.query(Person).all()
 if not len(people):
-    print "adding people........"
+    print("adding people........")
     people = pc.collect('people')
     mm.add_collected_people(people)
     s.commit()
     
 depts = s.query(Department).all()
 if not len(depts):
-    print "adding departments....."
+    print("adding departments.....")
     depts = pc.collect('depts')
     mm.add_collected_depts(depts)
     s.commit()
@@ -107,27 +110,27 @@ ulist = [y1, y2, y3, y4, y5, y6]
 rsslist = []
 for url, filename in ulist:
     if os.path.exists(filename):
-        rss = Pickle.load(file(filename))
+        rss = Pickle.load(open(filename, 'rb'))
     else:
         rss = mm.get_rss(url)
-        Pickle.dump(rss, file(filename, 'w'))
+        Pickle.dump(rss, open(filename, 'wb'))
     rsslist.append(rss)
     
 # add all meetings
 for rss in rsslist:
-    print "Handle %s" % rss
+    print("Handle %s" % rss)
     for entry in rss.entries:
         id, guid = legistar_id_guid(entry.link)
         meeting = s.query(Meeting).get(id)
         if meeting is None:
-            print "adding meeting %d from rss" % id
+            print("adding meeting %d from rss" % id)
             try:
                 mm.add_meeting_from_rss(entry)
                 s.commit()
             except IntegrityError:
                 s.rollback()
         else:
-            print "Meeting %d already present." % id
+            print("Meeting %d already present." % id)
             
 # merge all meeting info
 filtered = or_(Meeting.minutes_status == None,
@@ -137,7 +140,7 @@ meetings = qmeetings.all()
 for meeting in meetings:
     collected = pc.collect('meeting', link=meeting.link)
     mm._merge_collected_meeting(meeting, collected)
-    print "Merging meeting %d" % meeting.id
+    print("Merging meeting %d" % meeting.id)
     s.commit()
     
 
@@ -147,8 +150,13 @@ for meeting in meetings:
     pmeeting = pc.collect('meeting', link=meeting.link)
     for mitem in pmeeting['items']:
         item = pc.collect('item', link=mitem['item_page'])
+        if b'id' in item:
+            sitem = {}
+            for key in item:
+                sitem[key.decode()] = item[key]
+            item = sitem
         if not check_dupe_item(item):
-            print "adding item %d to database." % item['id']
+            print("adding item %d to database." % item['id'])
             mm._add_collected_legislation_item(item)
         if 'action_details' not in item:
             item['action_details'] = []
@@ -156,7 +164,7 @@ for meeting in meetings:
             action = pc.collect('action', link=link)
             dbaction = s.query(Action).get(action['id'])
             if dbaction is None:
-                print "adding action %d to database." % action['id']
+                print("adding action %d to database." % action['id'])
                 mm.add_collected_action(item['id'], action)
         s.commit()
     s.commit()
