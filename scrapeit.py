@@ -37,8 +37,9 @@ else:
 
     else:
         #dburl = "postgresql://dbadmin@bard/leaflet"
+        #xdburl = "postgresql://dbadmin@localhost/hubby2016"
+        #dburl = "sqlite:////freespace/home/umeboshi/workspace/gillie/gillie.sqlite"
         dburl = "sqlite:///%(here)s/hubby.sqlite" % dict(here=os.getcwd())
-        dburl = "postgresql://dbadmin@localhost/hubby2016"
 
 
 here = os.getcwd()
@@ -89,7 +90,7 @@ if not len(depts):
 
 from hubby.legistar import RSS_THIS_MONTH, RSS_YEAR_2011, RSS_YEAR_2012
 from hubby.legistar import RSS_YEAR_2013, RSS_YEAR_2014, RSS_YEAR_2015
-from hubby.legistar import RSS_YEAR_2016
+from hubby.legistar import RSS_YEAR_2016, RSS_YEAR_2017, RSS_YEAR_2018
 from hubby.legistar import RSS_YEARLY_FEEDS
 
 
@@ -102,11 +103,14 @@ y4 = RSS_YEAR_2014, 'data/y4.rss'
 
 y5 = RSS_YEAR_2015, 'data/y5.rss'
 y6 = RSS_YEAR_2016, 'data/y6.rss'
+y7 = RSS_YEAR_2017, 'data/y7.rss'
+y8 = RSS_YEAR_2018, 'data/y8.rss'
+
 
 m1 = RSS_THIS_MONTH, 'data/m1.rss'
 
 #ulist = [y1, y2, y3, y4, y5, y6, m1]
-ulist = [y1, y2, y3, y4, y5, y6]
+ulist = [y1, y2, y3, y4, y5, y6, y7, y8]
 rsslist = []
 for url, filename in ulist:
     if os.path.exists(filename):

@@ -22,6 +22,8 @@ timeformat = '%I:%M %p'
 
 
 def convert_agenda_number(agenda_number):
+    while agenda_number.startswith('.'):
+        agenda_number = agenda_number[1:]
     delimiter = '.-'
     for delimiter in ['. -', '.-', '. - ', ' - ', '-']:
         if delimiter in agenda_number:

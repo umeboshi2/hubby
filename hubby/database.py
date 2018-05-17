@@ -30,7 +30,7 @@ AgendaItemType = Enum('presentation', 'policy', 'routine', 'unknown',
                       name='agenda_item_type_enum')
 
 VoteType = Enum('Yea', 'Nay', 'Abstain', 'Absent', 'Present',
-                'TEL-No Vote',
+                'TEL-No Vote', 'Recuse',
                 name='lgr_vote_type_enum')
 
 AgendaItemTypeMap = dict(V='presentation', VI='policy',
