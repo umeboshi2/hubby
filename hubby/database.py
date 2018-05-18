@@ -280,19 +280,23 @@ class ActionVote(Base, SerialBase):
     action_id = Column('action_id', Integer,
                        ForeignKey('lgr_actions.id'),
                        primary_key=True)
-    person_id = Column('person_id', Integer,
-                       ForeignKey('lgr_people.id'),
-                       primary_key=True)
-    vote = Column('vote', VoteType)
+    ward1 = Column('ward1', VoteType)
+    ward1_person_id = Column('ward1_person_id', Integer,
+                             ForeignKey('lgr_people.id'))
 
-    def __init__(self, action_id, person_id, vote):
-        self.action_id = action_id
-        self.person_id = person_id
-        self.vote = vote
+    ward2 = Column('ward2', VoteType)
+    ward2_person_id = Column('ward2_person_id', Integer,
+                             ForeignKey('lgr_people.id'))
+    ward3 = Column('ward3', VoteType)
+    ward3_person_id = Column('ward3_person_id', Integer,
+                             ForeignKey('lgr_people.id'))
+    ward4 = Column('ward4', VoteType)
+    ward4_person_id = Column('ward4_person_id', Integer,
+                             ForeignKey('lgr_people.id'))
+    ward5 = Column('ward5', VoteType)
+    ward5_person_id = Column('ward5_person_id', Integer,
+                             ForeignKey('lgr_people.id'))
 
-    def __repr__(self):
-        infotuple = self.action_id, self.person_id, self.vote
-        return "<ActionVote %d:%d  %s>" % infotuple
 
 
 class File(Base, SerialBase):

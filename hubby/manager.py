@@ -62,16 +62,13 @@ class ModelManager(object):
         query = query.filter(Meeting.date >= start)
         query = query.filter(Meeting.date <= end)
         return query
-    
+
     def get_ranged_meetings(self, start, end, timestamps=False):
         if timestamps:
             start, end = convert_range_to_datetime(start, end)
         q = self.session.query(Meeting)
         q = self._range_filter(q, start, end)
         return q.all()
-    
-    
-    
 
     # entry is rss entry
     def add_meeting_from_rss(self, entry):
@@ -293,10 +290,19 @@ class ModelManager(object):
         item_action = ItemAction(item_id, dbaction.id)
         self.session.add(item_action)
         # handle votes
+        ward_num = 1
+        vote_attributes = dict(action_id=dbaction.id)
         for name, link, vote in action['votes']:
             person_id, ignore = legistar_id_guid(link)
-            avote = ActionVote(dbaction.id, person_id, vote)
-            self.session.add(avote)
+            id_key = 'ward{}_person_id'.format(ward_num)
+            vote_attributes[id_key] = person_id
+            vote_attributes['ward{}'.format(ward_num)] = vote
+            ward_num += 1
+
+        avote = ActionVote()
+        for attribute, value in vote_attributes.items():
+            setattr(avote, attribute, value)
+        self.session.add(avote)
 
     # add the item before the actions
     def _add_collected_legislation_item(self, item):
