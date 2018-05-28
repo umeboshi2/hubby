@@ -20,7 +20,17 @@ from hubby.collector.rss import RssCollector
 
 timeformat = '%I:%M %p'
 
+drop_models = [Attachment, ActionVote, Action, ItemAction,
+               MeetingItem, Item, Meeting, Department, Person]
 
+def delete_all(session):
+    transaction.begin()
+    for model in drop_models:
+        q = session.query(model)
+        q.delete()
+    transaction.commit()
+    
+    
 def convert_agenda_number(agenda_number):
     while agenda_number.startswith('.'):
         agenda_number = agenda_number[1:]

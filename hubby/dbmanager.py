@@ -5,7 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from hubby.database import Meeting, Item, Action
 from hubby.database import Person, Department
 
-from hubby.manager import ModelManager
+from hubby.manager import ModelManager, delete_all
+
 from hubby.util import legistar_id_guid
 
 
@@ -35,20 +36,26 @@ class DatabaseManager(object):
         self.meeting = None
         self.parsed = None
 
+    def add_collected_people(self, people):
+        return self.manager.add_collected_people(people)
+
     def add_people(self):
         people = self.session.query(Person).all()
         if not len(people):
             print("adding people........")
             people = self.collecter.collect('people')
-            self.manager.add_collected_people(people)
+            self.add_collected_people(people)
             self.session.commit()
+
+    def add_collected_depts(self, depts):
+        return self.manager.add_collected_depts(depts)
 
     def add_departments(self):
         depts = self.session.query(Department).all()
         if not len(depts):
             print("adding departments.....")
             depts = self.collecter.collect('depts')
-            self.manager.add_collected_depts(depts)
+            self.add_collected_depts(depts)
             self.session.commit()
 
     def add_rss_meetings(self, url, rss=None):
@@ -72,6 +79,7 @@ class DatabaseManager(object):
         self.parsed = self.collecter.collect('meeting', link=self.meeting.link)
 
     def add_meetings(self):
+        "This adds full meetings which have been added to meetings table by rss." # noqa
         meetings = self.session.query(Meeting).all()
         for meeting in meetings:
             self.set_meeting(meeting)
@@ -82,6 +90,7 @@ class DatabaseManager(object):
         for item in self.parsed['items']:
             self.add_meeting_item(item)
         self.manager._merge_collected_meeting_items(meeting, self.parsed)
+        self.manager._merge_collected_meeting(meeting, self.parsed)
         self.session.commit()
 
     def merge_nonfinal(self):
@@ -119,3 +128,7 @@ class DatabaseManager(object):
                 print("adding action %d to database." % action['id'])
                 self.manager.add_collected_action(item_id, action)
         self.session.commit()
+
+    def delete_all(self):
+        delete_all(self.session)
+        
