@@ -1,4 +1,5 @@
 import feedparser
+import requests
 
 from hubby.util import get_rss_feed
 
@@ -10,7 +11,8 @@ class RssCollector(object):
         self.entries = []
 
     def get_rss(self, url):
-        content, info = get_rss_feed(url)
-        self.info = info
-        self.rss = feedparser.parse(content)
+        r = requests.get(url)
+        self.content = r.content
+        self.info = r.headers
+        self.rss = feedparser.parse(r.content)
         self.entries = self.rss.entries
