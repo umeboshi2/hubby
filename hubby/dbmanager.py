@@ -29,13 +29,20 @@ def check_dupe_item(session, item):
 
 
 class DatabaseManager(object):
-    def __init__(self, session, collecter):
+    def __init__(self, session, collector):
         self.session = session
-        self.collecter = collecter
+        self.collector = collector
         self.manager = ModelManager(self.session)
         self.meeting = None
         self.parsed = None
 
+    @property
+    def collecter(self):
+        # FIXME collecter should be collector
+        import warnings
+        warnings.warn("Please use .collector instead.", stacklevel=2)
+        return self.collector
+    
     def add_collected_people(self, people):
         return self.manager.add_collected_people(people)
 
@@ -43,7 +50,7 @@ class DatabaseManager(object):
         people = self.session.query(Person).all()
         if not len(people):
             print("adding people........")
-            people = self.collecter.collect('people')
+            people = self.collector.collect('people')
             self.add_collected_people(people)
             self.session.commit()
 
@@ -54,7 +61,7 @@ class DatabaseManager(object):
         depts = self.session.query(Department).all()
         if not len(depts):
             print("adding departments.....")
-            depts = self.collecter.collect('depts')
+            depts = self.collector.collect('depts')
             self.add_collected_depts(depts)
             self.session.commit()
 
@@ -76,7 +83,7 @@ class DatabaseManager(object):
 
     def set_meeting(self, meeting):
         self.meeting = meeting
-        self.parsed = self.collecter.collect('meeting', link=self.meeting.link)
+        self.parsed = self.collector.collect('meeting', link=self.meeting.link)
 
     def add_meetings(self):
         "This adds full meetings which have been added to meetings table by rss." # noqa
@@ -93,24 +100,52 @@ class DatabaseManager(object):
         self.manager._merge_collected_meeting(meeting, self.parsed)
         self.session.commit()
 
+    def add_pickled_meeting(self, meeting):
+        meeting_id = meeting['info']['id']
+        for item in meeting['items']:
+            self.add_collected_item(item)
+        self.manager._merge_pickled_meeting_items(meeting_id, meeting['items'])
+        
+    
+
     def merge_nonfinal(self):
         filtered = or_(Meeting.minutes_status == None, # noqa
                        Meeting.minutes_status != 'Final')
         qmeetings = self.session.query(Meeting).filter(filtered)
         meetings = qmeetings.all()
         for meeting in meetings:
-            collected = self.collecter.collect('meeting', link=meeting.link)
+            collected = self.collector.collect('meeting', link=meeting.link)
             self.manager._merge_collected_meeting(meeting, collected)
             print("Merging meeting %d" % meeting.id)
             self.session.commit()
 
-    def add_meeting_item(self, parsed_item):
-        item = self.collecter.collect('item', link=parsed_item['item_page'])
+    def convert_binary_item(self, item):
         if b'id' in item:
             sitem = {}
             for key in item:
                 sitem[key.decode()] = item[key]
             item = sitem
+        return item
+
+    def add_collected_actions(self, item_id, actions):
+        for action in actions:
+            dbaction = self.session.query(Action).get(action['id'])
+            if dbaction is None:
+                print("adding action %d to database." % action['id'])
+                self.manager.add_collected_action(item_id, action)
+        self.session.commit()
+        
+    def add_collected_item(self, item):
+        item = self.convert_binary_item(item)
+        if not check_dupe_item(self.session, item):
+            print("adding item %d to database." % item['id'])
+            self.manager._add_collected_legislation_item(item)
+        self.add_collected_actions(item['id'], item['actions'])
+        self.session.commit()
+        
+    def add_meeting_item(self, parsed_item):
+        item = self.collector.collect('item', link=parsed_item['item_page'])
+        item = self.convert_binary_item(item)
         if not check_dupe_item(self.session, item):
             print("adding item %d to database." % item['id'])
             self.manager._add_collected_legislation_item(item)
@@ -122,7 +157,7 @@ class DatabaseManager(object):
 
     def add_item_actions(self, item_id, action_details):
         for link in action_details:
-            action = self.collecter.collect('action', link=link)
+            action = self.collector.collect('action', link=link)
             dbaction = self.session.query(Action).get(action['id'])
             if dbaction is None:
                 print("adding action %d to database." % action['id'])

@@ -29,8 +29,8 @@ def delete_all(session):
         q = session.query(model)
         q.delete()
     transaction.commit()
-    
-    
+
+
 def convert_agenda_number(agenda_number):
     while agenda_number.startswith('.'):
         agenda_number = agenda_number[1:]
@@ -167,7 +167,14 @@ class ModelManager(object):
         self.session.flush()
         transaction.commit()
 
+        
+
     def _merge_collected_meeting_items(self, meeting, collected):
+        meeting_id = meeting.id
+        return self._merge_pickled_meeting_items(meeting_id, collected)
+
+
+    def _merge_pickled_meeting_items(self, meeting_id, collected):
         transaction.begin()
         items = collected['items']
         item_count = 0
@@ -175,12 +182,12 @@ class ModelManager(object):
             item_count += 1
             item_id, guid = legistar_id_guid(item['item_page'])
             query = self.session.query(MeetingItem)
-            query = query.filter_by(meeting_id=meeting.id)
+            query = query.filter_by(meeting_id=meeting_id)
             query = query.filter_by(item_id=item_id)
             try:
                 dbitem = query.one()
             except NoResultFound:
-                dbitem = MeetingItem(meeting.id, item_id)
+                dbitem = MeetingItem(meeting_id, item_id)
             agenda_num = item['agenda_num']
             ##########################################
             ## Work around       #####################
@@ -195,7 +202,7 @@ class ModelManager(object):
             ##                    ####################
             ##########################################
             # first agenda item is missing from meeting details
-            if meeting.id == 302621:
+            if meeting_id == 302621:
                 agenda_num = '2'
             if agenda_num is not None:
                 dbitem.agenda_num = agenda_num
