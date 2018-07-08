@@ -46,6 +46,9 @@ class PickleCollector(object):
             raise RuntimeError('unknown type')
         return os.path.join(self.dir, filename)
 
+    def get_filename(self, type, id):
+        return self._filename(type, id)
+
     def _dbname(self, type, id=None):
         if type == 'people':
             dbname = 'people'
