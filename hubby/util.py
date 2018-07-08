@@ -22,8 +22,6 @@ class InvalidDateFormat(Exception):
 
 # Tidy function inspired by:
 # http://www.toao.net/48-replacing-smart-quotes-and-em-dashes-in-mysql
-
-
 def tidy_needless_utf_punctuation(data):
     data = data.replace('\xe2\x80\x98', "'")
     data = data.replace('\xe2\x80\x99', "'")
@@ -42,7 +40,7 @@ def convert_range_to_datetime(start, end):
     
 
 def random_wait(minimum=5, maximum=15, msg=''):
-    #seconds = random.randint(minimum, maximum)
+    # seconds = random.randint(minimum, maximum)
     seconds = random.random() * 5 + 1
     if msg:
         template_data = dict(seconds=seconds)
